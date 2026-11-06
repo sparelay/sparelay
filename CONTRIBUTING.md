@@ -77,6 +77,14 @@ The sign-off certifies that you have the right to submit the contribution under
 the project's MIT license. See <https://developercertificate.org/> for the full
 text.
 
+- Sign off every commit. When amending, use `git commit --amend -s`.
+- Let `-s` generate the trailer from `git config user.name` and `user.email`
+  instead of typing it by hand.
+- Only sign off your own contribution. Never add a `Signed-off-by` for another
+  person, an AI assistant, or a tool.
+- If a commit is missing its sign-off, fix it with `git commit --amend -s` or
+  `git rebase --signoff <base>` rather than appending a trailer manually.
+
 ## Adding a provider
 
 1. Add the schema and default configuration under `features/provider/model/<type>/`.
