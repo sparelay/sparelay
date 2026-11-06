@@ -1,0 +1,130 @@
+"use client";
+
+import { getFormProps, getInputProps, type FieldMetadata } from "@conform-to/react";
+import { useEffect, type ComponentType } from "react";
+import { toast } from "sonner";
+
+import { Button } from "@/shared/components/ui/button";
+
+import { useProviderForm } from "../hooks/use-provider-form";
+import { providerDefaultBaseUrl, type ProviderOutput, type ProviderType } from "../model/provider";
+import {
+  ApiKeyField,
+  ApifyExtraFields,
+  BaseUrlField,
+  BraveExtraFields,
+  CooldownField,
+  ExaExtraFields,
+  FirecrawlExtraFields,
+  FallbackField,
+  LinkupExtraFields,
+  MwmblExtraFields,
+  NameField,
+  ParallelExtraFields,
+  ScrapedoExtraFields,
+  SearxngExtraFields,
+  SerpapiExtraFields,
+  TavilyExtraFields,
+  TimeoutField,
+  YoucomExtraFields,
+  ZenserpExtraFields,
+} from "./fields";
+import type { ProviderFormExtraFieldsProps } from "./provider-form.types";
+
+const EXTRA_FIELDS = {
+  searxng: SearxngExtraFields,
+  exa: ExaExtraFields,
+  tavily: TavilyExtraFields,
+  parallel: ParallelExtraFields,
+  linkup: LinkupExtraFields,
+  youcom: YoucomExtraFields,
+  mwmbl: MwmblExtraFields,
+  brave: BraveExtraFields,
+  apify: ApifyExtraFields,
+  serpapi: SerpapiExtraFields,
+  zenserp: ZenserpExtraFields,
+  firecrawl: FirecrawlExtraFields,
+  scrapedo: ScrapedoExtraFields,
+} satisfies { [K in ProviderType]: ComponentType<ProviderFormExtraFieldsProps<K>> };
+
+type ExtraFieldsComponent = ComponentType<{
+  formId: string;
+  extra: FieldMetadata<Record<string, unknown>>;
+}>;
+
+type Props =
+  | {
+      mode: "add";
+      type: ProviderType;
+      provider?: never;
+      onSaved: () => void;
+      onCancel?: () => void;
+    }
+  | {
+      mode: "edit";
+      type?: never;
+      provider: ProviderOutput;
+      onSaved: () => void;
+      onCancel?: () => void;
+    };
+
+export function ProviderForm({ mode, type, provider, onSaved, onCancel }: Props) {
+  const activeType = mode === "add" ? type : provider.type;
+  const defaultValue = mode === "edit" ? provider : undefined;
+
+  const { form, fields, formAction, isPending, state } = useProviderForm(
+    activeType,
+    mode,
+    defaultValue,
+  );
+
+  useEffect(() => {
+    if (state?.status === "success") {
+      toast.success(state.message);
+      onSaved();
+    }
+  }, [state, onSaved]);
+
+  const ExtraFields = EXTRA_FIELDS[activeType] as unknown as ExtraFieldsComponent;
+  const baseUrlPlaceholder = providerDefaultBaseUrl(activeType);
+
+  return (
+    <form {...getFormProps(form)} action={formAction} className="flex flex-col gap-6">
+      {form.errors && <p className="text-sm text-destructive">{form.errors.join(", ")}</p>}
+
+      {mode === "edit" && <input type="hidden" name="id" value={provider.id} />}
+      <input type="hidden" name={fields.type.name} value={activeType} />
+      <input {...getInputProps(fields.enabled, { type: "hidden" })} />
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-base font-semibold">Basic</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <NameField field={fields.name} />
+          <BaseUrlField field={fields.baseUrl} placeholder={baseUrlPlaceholder} />
+          <ApiKeyField field={fields.apiKey} mode={mode} />
+          <TimeoutField field={fields.timeoutSec} />
+          <CooldownField field={fields.cooldown} />
+          <FallbackField formId={form.id} field={fields.fallbackOnEmpty} />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-base font-semibold">Advanced</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <ExtraFields formId={form.id} extra={fields.extra} />
+        </div>
+      </section>
+
+      <div className="sticky bottom-0 z-10 mt-6 flex flex-col-reverse gap-2 border-t bg-background/95 py-3 backdrop-blur sm:flex-row sm:justify-end">
+        {onCancel && (
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+        )}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Saving…" : mode === "edit" ? "Save" : "Add"}
+        </Button>
+      </div>
+    </form>
+  );
+}

@@ -1,0 +1,33 @@
+name: Provider request
+description: Request support for a new search provider
+title: "[Provider]: "
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Provider name
+    validations:
+      required: true
+  - type: input
+    id: docs
+    attributes:
+      label: API documentation URL
+      placeholder: https://...
+    validations:
+      required: true
+  - type: dropdown
+    id: auth
+    attributes:
+      label: Authentication
+      options:
+        - API key
+        - OAuth
+        - No authentication
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Rate limits, pricing, response format, or anything else that would help.

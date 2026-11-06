@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/sparelay/sparelay/security/advisories/new
+    about: Report security issues privately, not in public issues.
+  - name: Documentation
+    url: https://github.com/sparelay/sparelay#readme
+    about: Read the setup, API, and provider documentation.

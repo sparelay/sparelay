@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+*.log
+.env*
+database
+data
+docs
+README.md
+README.ja.md
+tsconfig.tsbuildinfo
