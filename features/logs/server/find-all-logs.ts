@@ -26,7 +26,7 @@ export function findAllLogs(limit: number, page: number): LogPage {
       createdAt: searchLogsTable.createdAt,
     })
     .from(searchLogsTable)
-    .orderBy(desc(searchLogsTable.id))
+    .orderBy(desc(searchLogsTable.createdAt), desc(searchLogsTable.id))
     .limit(size)
     .offset((current - 1) * size)
     .all();
