@@ -18,7 +18,7 @@ export function fetchPoints(hours: number): { points: Point[]; capped: boolean }
         sql`${searchLogsTable.createdAt} <= datetime('now')`,
       ),
     )
-    .orderBy(asc(searchLogsTable.id))
+    .orderBy(asc(searchLogsTable.createdAt), asc(searchLogsTable.id))
     .limit(MAX_POINTS + 1)
     .all();
   return { points: rows.slice(0, MAX_POINTS), capped: rows.length > MAX_POINTS };
