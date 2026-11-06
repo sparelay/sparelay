@@ -99,7 +99,7 @@ export const PROVIDER_REGISTRY = {
   },
   firecrawl: {
     label: "Firecrawl",
-    icon: { light: "/assets/images/brand/firecrawl.png" },
+    icon: { light: "/assets/images/brand/firecrawl.svg" },
     schema: generateFormSchema(firecrawlFormSchema),
   },
   scrapedo: {
