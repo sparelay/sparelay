@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalCountryCodeSchema,
   optionalTrueStringSchema,
@@ -30,7 +29,7 @@ export const youcomExtraFieldsSchema = z
 
 export const youcomFormSchema = commonFieldsSchema.extend({
   type: z.literal("youcom"),
-  baseUrl: generateDefaultedBaseUrlSchema(YOUCOM_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(YOUCOM_DEFAULT_BASE_URL),
   extra: youcomExtraFieldsSchema,
 });
 

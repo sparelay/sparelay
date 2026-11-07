@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalCountryCodeSchema,
   optionalTrueStringSchema,
@@ -29,7 +28,7 @@ export const braveExtraFieldsSchema = z
 
 export const braveFormSchema = commonFieldsSchema.extend({
   type: z.literal("brave"),
-  baseUrl: generateDefaultedBaseUrlSchema(BRAVE_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(BRAVE_DEFAULT_BASE_URL),
   extra: braveExtraFieldsSchema,
 });
 

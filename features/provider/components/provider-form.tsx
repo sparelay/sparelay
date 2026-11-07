@@ -3,11 +3,12 @@
 import { getFormProps, getInputProps, type FieldMetadata } from "@conform-to/react";
 import { useEffect, type ComponentType } from "react";
 import { toast } from "sonner";
+import type { z } from "zod";
 
 import { Button } from "@/shared/components/ui/button";
 
 import { useProviderForm } from "../hooks/use-provider-form";
-import { providerDefaultBaseUrl, type ProviderOutput, type ProviderType } from "../model/provider";
+import { PROVIDER_REGISTRY, type ProviderOutput, type ProviderType } from "../model/provider";
 import {
   ApiKeyField,
   ApifyExtraFields,
@@ -52,6 +53,27 @@ type ExtraFieldsComponent = ComponentType<{
   extra: FieldMetadata<Record<string, unknown>>;
 }>;
 
+type DefaultsShape = {
+  name: z.ZodType;
+  apiKey: z.ZodType;
+  type: z.ZodType;
+  baseUrl: z.ZodType;
+  extra: z.ZodType;
+} & z.ZodRawShape;
+
+const DEFAULT_OMIT: { name: true; apiKey: true; type: true; baseUrl: true } = {
+  name: true,
+  apiKey: true,
+  type: true,
+  baseUrl: true,
+};
+
+function getSchemaDefaults<T extends z.ZodObject<DefaultsShape>>(schema: T) {
+  const defaults = schema.omit(DEFAULT_OMIT).parse({ extra: {} });
+  const baseUrl = schema.shape.baseUrl.safeParse(undefined);
+  return baseUrl.success ? { ...defaults, baseUrl: baseUrl.data } : defaults;
+}
+
 type Props =
   | {
       mode: "add";
@@ -70,7 +92,8 @@ type Props =
 
 export function ProviderForm({ mode, type, provider, onSaved, onCancel }: Props) {
   const activeType = mode === "add" ? type : provider.type;
-  const defaultValue = mode === "edit" ? provider : undefined;
+  const defaultValue =
+    mode === "edit" ? provider : getSchemaDefaults(PROVIDER_REGISTRY[activeType].schema.add);
 
   const { form, fields, formAction, isPending, state } = useProviderForm(
     activeType,
@@ -86,7 +109,6 @@ export function ProviderForm({ mode, type, provider, onSaved, onCancel }: Props)
   }, [state, onSaved]);
 
   const ExtraFields = EXTRA_FIELDS[activeType] as unknown as ExtraFieldsComponent;
-  const baseUrlPlaceholder = providerDefaultBaseUrl(activeType);
 
   return (
     <form {...getFormProps(form)} action={formAction} className="flex flex-col gap-6">
@@ -100,7 +122,7 @@ export function ProviderForm({ mode, type, provider, onSaved, onCancel }: Props)
         <h2 className="text-base font-semibold">Basic</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <NameField field={fields.name} />
-          <BaseUrlField field={fields.baseUrl} placeholder={baseUrlPlaceholder} />
+          <BaseUrlField field={fields.baseUrl} />
           <ApiKeyField field={fields.apiKey} mode={mode} />
           <TimeoutField field={fields.timeoutSec} />
           <CooldownField field={fields.cooldown} />

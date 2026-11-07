@@ -117,12 +117,6 @@ export const providerTypeSchema = z.custom<keyof typeof PROVIDER_REGISTRY>(
 
 export type ProviderType = z.infer<typeof providerTypeSchema>;
 
-export function providerDefaultBaseUrl(type: ProviderType): string | undefined {
-  const schema = PROVIDER_REGISTRY[type].schema.add.shape.baseUrl;
-  const result = schema.safeParse(undefined);
-  return result.success && typeof result.data === "string" ? result.data : undefined;
-}
-
 export type ProviderOutput = z.output<
   (typeof PROVIDER_REGISTRY)[ProviderType]["schema"]["edit"]
 > & {

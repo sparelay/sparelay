@@ -46,11 +46,11 @@ describe("apify form schema", () => {
     ).toBe(false);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(apifyFormSchema.parse({ ...apifyForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(apifyFormSchema.parse({ ...apifyForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.apify.com",
     );
-    expect(apifyProviderConfigSchema.parse({ ...apifyConfig, baseUrl: "" }).baseUrl).toBe(
+    expect(apifyProviderConfigSchema.parse({ ...apifyConfig, baseUrl: undefined }).baseUrl).toBe(
       "https://api.apify.com",
     );
   });

@@ -68,9 +68,11 @@ describe("exa form schema", () => {
     );
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(exaFormSchema.parse({ ...exaForm, baseUrl: "" }).baseUrl).toBe("https://api.exa.ai");
-    expect(exaProviderConfigSchema.parse({ ...exaConfig, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(exaFormSchema.parse({ ...exaForm, baseUrl: undefined }).baseUrl).toBe(
+      "https://api.exa.ai",
+    );
+    expect(exaProviderConfigSchema.parse({ ...exaConfig, baseUrl: undefined }).baseUrl).toBe(
       "https://api.exa.ai",
     );
   });

@@ -47,11 +47,11 @@ describe("youcom form schema", () => {
     );
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(youcomFormSchema.parse({ ...youcomForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(youcomFormSchema.parse({ ...youcomForm, baseUrl: undefined }).baseUrl).toBe(
       "https://ydc-index.io",
     );
-    expect(youcomProviderConfigSchema.parse({ ...youcomConfig, baseUrl: "" }).baseUrl).toBe(
+    expect(youcomProviderConfigSchema.parse({ ...youcomConfig, baseUrl: undefined }).baseUrl).toBe(
       "https://ydc-index.io",
     );
   });

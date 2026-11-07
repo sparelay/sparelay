@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   generateTimeoutSecSchema,
   optionalCountryCodeSchema,
@@ -37,7 +36,7 @@ export const scrapedoExtraFieldsSchema = z
 
 export const scrapedoFormSchema = commonFieldsSchema.extend({
   type: z.literal("scrapedo"),
-  baseUrl: generateDefaultedBaseUrlSchema(SCRAPEDO_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(SCRAPEDO_DEFAULT_BASE_URL),
   timeoutSec: generateTimeoutSecSchema(60),
   extra: scrapedoExtraFieldsSchema,
 });

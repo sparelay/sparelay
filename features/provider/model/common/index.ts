@@ -99,15 +99,6 @@ export function generateOptionalIntStringSchema(min: number, max: number, messag
     .default("");
 }
 
-export function generateDefaultedBaseUrlSchema(defaultUrl: string) {
-  return z
-    .string()
-    .trim()
-    .transform((v) => (v === "" ? defaultUrl : v))
-    .pipe(commonFieldsSchema.shape.baseUrl)
-    .default(defaultUrl);
-}
-
 export function generateProviderConfigSchema<Shape extends z.ZodRawShape>(
   formSchema: z.ZodObject<Shape & FormOnlyShape>,
 ) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { PROVIDER_REGISTRY, providerDefaultBaseUrl, providerTypeSchema } from "./provider";
+import { PROVIDER_REGISTRY, providerTypeSchema } from "./provider";
 
 describe("providerTypeSchema", () => {
   it("accepts registry keys", () => {
@@ -23,24 +23,6 @@ describe("providerTypeSchema", () => {
     expect(providerTypeSchema.safeParse("unknown").success).toBe(false);
     expect(providerTypeSchema.safeParse("").success).toBe(false);
     expect(providerTypeSchema.safeParse(null).success).toBe(false);
-  });
-});
-
-describe("providerDefaultBaseUrl", () => {
-  it("reads the default from each provider schema", () => {
-    expect(providerDefaultBaseUrl("exa")).toBe("https://api.exa.ai");
-    expect(providerDefaultBaseUrl("tavily")).toBe("https://api.tavily.com");
-    expect(providerDefaultBaseUrl("parallel")).toBe("https://api.parallel.ai");
-    expect(providerDefaultBaseUrl("linkup")).toBe("https://api.linkup.so");
-    expect(providerDefaultBaseUrl("youcom")).toBe("https://ydc-index.io");
-    expect(providerDefaultBaseUrl("mwmbl")).toBe("https://mwmbl.org");
-    expect(providerDefaultBaseUrl("brave")).toBe("https://api.search.brave.com");
-    expect(providerDefaultBaseUrl("apify")).toBe("https://api.apify.com");
-    expect(providerDefaultBaseUrl("serpapi")).toBe("https://serpapi.com");
-    expect(providerDefaultBaseUrl("zenserp")).toBe("https://app.zenserp.com");
-    expect(providerDefaultBaseUrl("firecrawl")).toBe("https://api.firecrawl.dev");
-    expect(providerDefaultBaseUrl("scrapedo")).toBe("https://api.scrape.do");
-    expect(providerDefaultBaseUrl("searxng")).toBeUndefined();
   });
 });
 

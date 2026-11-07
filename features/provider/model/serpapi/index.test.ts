@@ -44,12 +44,12 @@ describe("serpapi form schema", () => {
     );
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(serpapiFormSchema.parse({ ...serpapiForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(serpapiFormSchema.parse({ ...serpapiForm, baseUrl: undefined }).baseUrl).toBe(
       "https://serpapi.com",
     );
-    expect(serpapiProviderConfigSchema.parse({ ...serpapiConfig, baseUrl: "" }).baseUrl).toBe(
-      "https://serpapi.com",
-    );
+    expect(
+      serpapiProviderConfigSchema.parse({ ...serpapiConfig, baseUrl: undefined }).baseUrl,
+    ).toBe("https://serpapi.com");
   });
 });

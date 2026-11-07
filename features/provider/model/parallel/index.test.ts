@@ -48,13 +48,13 @@ describe("parallel form schema", () => {
     ).toBe(false);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(parallelFormSchema.parse({ ...parallelForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(parallelFormSchema.parse({ ...parallelForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.parallel.ai",
     );
-    expect(parallelProviderConfigSchema.parse({ ...parallelConfig, baseUrl: "" }).baseUrl).toBe(
-      "https://api.parallel.ai",
-    );
+    expect(
+      parallelProviderConfigSchema.parse({ ...parallelConfig, baseUrl: undefined }).baseUrl,
+    ).toBe("https://api.parallel.ai");
   });
 });
 

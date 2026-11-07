@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateOptionalIntStringSchema,
   generateProviderConfigSchema,
   optionalCountryCodeSchema,
@@ -32,7 +31,7 @@ export const parallelExtraFieldsSchema = z
 
 export const parallelFormSchema = commonFieldsSchema.extend({
   type: z.literal("parallel"),
-  baseUrl: generateDefaultedBaseUrlSchema(PARALLEL_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(PARALLEL_DEFAULT_BASE_URL),
   extra: parallelExtraFieldsSchema,
 });
 

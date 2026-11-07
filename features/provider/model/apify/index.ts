@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   generateTimeoutSecSchema,
   optionalCountryCodeSchema,
@@ -32,7 +31,7 @@ export const apifyExtraFieldsSchema = z
 
 export const apifyFormSchema = commonFieldsSchema.extend({
   type: z.literal("apify"),
-  baseUrl: generateDefaultedBaseUrlSchema(APIFY_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(APIFY_DEFAULT_BASE_URL),
   timeoutSec: generateTimeoutSecSchema(25),
   extra: apifyExtraFieldsSchema,
 });

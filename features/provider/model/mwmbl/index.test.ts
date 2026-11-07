@@ -38,7 +38,9 @@ describe("mwmbl form schema", () => {
     expect(mwmblProviderConfigSchema.safeParse(mwmblConfig).success).toBe(true);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(mwmblFormSchema.parse({ ...mwmblForm, baseUrl: "" }).baseUrl).toBe("https://mwmbl.org");
+  it("uses the default base URL when omitted", () => {
+    expect(mwmblFormSchema.parse({ ...mwmblForm, baseUrl: undefined }).baseUrl).toBe(
+      "https://mwmbl.org",
+    );
   });
 });

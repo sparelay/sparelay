@@ -51,12 +51,12 @@ describe("firecrawl form schema", () => {
     ).toBe(false);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(firecrawlFormSchema.parse({ ...firecrawlForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(firecrawlFormSchema.parse({ ...firecrawlForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.firecrawl.dev",
     );
-    expect(firecrawlProviderConfigSchema.parse({ ...firecrawlConfig, baseUrl: "" }).baseUrl).toBe(
-      "https://api.firecrawl.dev",
-    );
+    expect(
+      firecrawlProviderConfigSchema.parse({ ...firecrawlConfig, baseUrl: undefined }).baseUrl,
+    ).toBe("https://api.firecrawl.dev");
   });
 });
