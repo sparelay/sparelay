@@ -63,8 +63,10 @@ It ships with a web UI for provider management, a search playground, usage analy
 3. Create `.env` and set your API key:
 
    ```bash
-   echo "API_KEY=your-api-key" > .env
+   echo "API_KEY=$(openssl rand -hex 32)" > .env
    ```
+
+   `API_KEY` must be at least 32 characters because it is also used to encrypt the admin session. `openssl rand -hex 32` produces a 64-character value.
 
 4. Start the stack:
 
@@ -180,10 +182,10 @@ If you need an additional provider, please open a pull request.
 
 ### Environment Variables
 
-| Variable  | Required | Default                  | Description                                                                         |
-| --------- | -------- | ------------------------ | ----------------------------------------------------------------------------------- |
-| `API_KEY` | Yes      | —                        | Protects UI login and every Bearer-authenticated API call. Use a long random value. |
-| `DB_PATH` | No       | `./data/database.sqlite` | SQLite database file. In Docker this resolves to `/app/data/database.sqlite`.       |
+| Variable  | Required | Default                  | Description                                                                                                                                    |
+| --------- | -------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `API_KEY` | Yes      | —                        | Protects UI login and every Bearer-authenticated API call. Use a random value of at least 32 characters (for example, `openssl rand -hex 32`). |
+| `DB_PATH` | No       | `./data/database.sqlite` | SQLite database file. In Docker this resolves to `/app/data/database.sqlite`.                                                                  |
 
 `DB_PATH` is only needed when you want to use a different SQLite file, such as a separate test database.
 
