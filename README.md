@@ -182,10 +182,11 @@ If you need an additional provider, please open a pull request.
 
 ### Environment Variables
 
-| Variable  | Required | Default                  | Description                                                                                                                                    |
-| --------- | -------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `API_KEY` | Yes      | —                        | Protects UI login and every Bearer-authenticated API call. Use a random value of at least 32 characters (for example, `openssl rand -hex 32`). |
-| `DB_PATH` | No       | `./data/database.sqlite` | SQLite database file. In Docker this resolves to `/app/data/database.sqlite`.                                                                  |
+| Variable                | Required | Default                  | Description                                                                                                                                                                                                         |
+| ----------------------- | -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `API_KEY`               | Yes      | —                        | Protects UI login and every Bearer-authenticated API call. Use a random value of at least 32 characters (for example, `openssl rand -hex 32`).                                                                      |
+| `SESSION_COOKIE_SECURE` | No       | auto                     | Forces the session cookie's `Secure` attribute. By default it is enabled when `X-Forwarded-Proto` is `https`. Set `true` or `false` to override. In Docker, add it to the service `environment` to pass it through. |
+| `DB_PATH`               | No       | `./data/database.sqlite` | SQLite database file. In Docker this resolves to `/app/data/database.sqlite`.                                                                                                                                       |
 
 `DB_PATH` is only needed when you want to use a different SQLite file, such as a separate test database.
 
