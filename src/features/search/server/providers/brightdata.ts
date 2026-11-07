@@ -22,18 +22,14 @@ const brightdataResponseSchema = z.object({
   error: z.unknown().optional(),
 });
 
-const SEARCH_URLS: Record<"google" | "bing", string> = {
-  google: "https://www.google.com/search",
-  bing: "https://www.bing.com/search",
-};
-
 function buildSearchUrl(
   query: string,
   count: number,
   extra: BrightdataProviderConfig["extra"],
 ): string {
-  const { engine, gl, hl, safe } = extra;
-  const url = new URL(SEARCH_URLS[engine]);
+  const { engine, domain, gl, hl, safe } = extra;
+  const host = engine === "bing" ? "bing.com" : domain;
+  const url = new URL(`https://www.${host}/search`);
   url.searchParams.set("q", query);
 
   if (engine === "google") {

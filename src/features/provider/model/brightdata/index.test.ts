@@ -27,6 +27,7 @@ describe("brightdata form schema", () => {
     expect(brightdataFormSchema.parse(brightdataForm).extra).toEqual({
       zone: "serp_api1",
       engine: "google",
+      domain: "google.com",
       gl: "",
       hl: "",
       safe: "",
@@ -42,6 +43,12 @@ describe("brightdata form schema", () => {
     expect(
       brightdataFormSchema.safeParse({ ...brightdataForm, extra: { zone: "a", safe: "strict" } })
         .success,
+    ).toBe(false);
+    expect(
+      brightdataFormSchema.safeParse({
+        ...brightdataForm,
+        extra: { zone: "a", domain: "not a domain" },
+      }).success,
     ).toBe(false);
   });
 

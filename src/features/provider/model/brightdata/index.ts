@@ -6,8 +6,12 @@ import {
   generateTimeoutSecSchema,
   optionalCountryCodeSchema,
 } from "../common";
+import { GOOGLE_DOMAINS } from "./google-domains";
+
+export { GOOGLE_DOMAINS };
 
 export const BRIGHTDATA_DEFAULT_BASE_URL = "https://api.brightdata.com";
+export const BRIGHTDATA_DEFAULT_DOMAIN = "google.com";
 
 export const brightdataExtraFieldsSchema = z
   .object({
@@ -16,6 +20,12 @@ export const brightdataExtraFieldsSchema = z
       .enum(["google", "bing"], { error: "Invalid search engine" })
       .optional()
       .default("google"),
+    domain: z
+      .string()
+      .trim()
+      .regex(/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i, "Invalid domain")
+      .optional()
+      .default(BRIGHTDATA_DEFAULT_DOMAIN),
     gl: optionalCountryCodeSchema,
     hl: z.string().trim().optional().default(""),
     safe: z

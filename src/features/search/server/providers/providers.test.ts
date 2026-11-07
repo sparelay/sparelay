@@ -841,7 +841,7 @@ describe("BrightdataProvider", () => {
       name: "Bright Data",
       baseUrl: "https://api.brightdata.test/",
       apiKey: "bk",
-      extra: { zone: "serp_api1", gl: "JP", hl: "ja", safe: "active" },
+      extra: { zone: "serp_api1", domain: "google.co.jp", gl: "JP", hl: "ja", safe: "active" },
     });
     const results = await new BrightdataProvider(config).search("hello", 5, 1000);
 
@@ -861,7 +861,7 @@ describe("BrightdataProvider", () => {
     expect(body.format).toBe("json");
     expect(body.country).toBe("jp");
     const url = new URL(body.url);
-    expect(url.origin).toBe("https://www.google.com");
+    expect(url.origin).toBe("https://www.google.co.jp");
     expect(url.searchParams.get("q")).toBe("hello");
     expect(url.searchParams.get("num")).toBe("5");
     expect(url.searchParams.get("gl")).toBe("jp");

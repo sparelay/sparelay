@@ -13,6 +13,7 @@ import {
 } from "@/shared/components/ui/select";
 
 import { useExtraFields } from "../../hooks/use-extra-fields";
+import { BRIGHTDATA_DEFAULT_DOMAIN, GOOGLE_DOMAINS } from "../../model/brightdata";
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 
 export function BrightdataExtraFields({ formId }: ProviderFormExtraFieldsProps<"brightdata">) {
@@ -22,11 +23,20 @@ export function BrightdataExtraFields({ formId }: ProviderFormExtraFieldsProps<"
     formId,
     initialValue: f.engine.defaultValue,
   });
+  const domainControl = useInputControl<string>({
+    name: f.domain.name,
+    formId,
+    initialValue: f.domain.defaultValue,
+  });
   const safeControl = useInputControl<string>({
     name: f.safe.name,
     formId,
     initialValue: f.safe.defaultValue,
   });
+  const engine = engineControl.value ?? "google";
+  const domain =
+    engine === "bing" ? "bing.com" : (domainControl.value ?? BRIGHTDATA_DEFAULT_DOMAIN);
+  const domainOptions = engine === "bing" ? ["bing.com"] : GOOGLE_DOMAINS;
   return (
     <>
       <Field data-invalid={!f.zone.valid || undefined}>
@@ -39,8 +49,12 @@ export function BrightdataExtraFields({ formId }: ProviderFormExtraFieldsProps<"
       <Field data-invalid={!f.engine.valid || undefined}>
         <FieldLabel htmlFor={f.engine.id}>Search engine</FieldLabel>
         <Select
-          value={engineControl.value ?? "google"}
-          onValueChange={(v) => engineControl.change(v ?? "google")}
+          value={engine}
+          onValueChange={(v) => {
+            const next = v ?? "google";
+            engineControl.change(next);
+            domainControl.change(next === "bing" ? "bing.com" : BRIGHTDATA_DEFAULT_DOMAIN);
+          }}
         >
           <SelectTrigger id={f.engine.id} aria-invalid={!f.engine.valid || undefined}>
             <SelectValue />
@@ -51,6 +65,25 @@ export function BrightdataExtraFields({ formId }: ProviderFormExtraFieldsProps<"
           </SelectContent>
         </Select>
         <FieldError>{f.engine.errors?.[0]}</FieldError>
+      </Field>
+      <Field data-invalid={!f.domain.valid || undefined}>
+        <FieldLabel htmlFor={f.domain.id}>Domain</FieldLabel>
+        <Select
+          value={domain}
+          onValueChange={(v) => domainControl.change(v ?? BRIGHTDATA_DEFAULT_DOMAIN)}
+        >
+          <SelectTrigger id={f.domain.id} aria-invalid={!f.domain.valid || undefined}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {domainOptions.map((item) => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <FieldError>{f.domain.errors?.[0]}</FieldError>
       </Field>
       <Field data-invalid={!f.gl.valid || undefined}>
         <FieldLabel htmlFor={f.gl.id}>Country (gl)</FieldLabel>
