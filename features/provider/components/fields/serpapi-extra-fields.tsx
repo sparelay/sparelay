@@ -12,8 +12,8 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
+import { useExtraFields } from "../../hooks/use-extra-fields";
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
-import { useExtraFields } from "./use-extra-fields";
 
 export function SerpapiExtraFields({ formId }: ProviderFormExtraFieldsProps<"serpapi">) {
   const f = useExtraFields<"serpapi">(formId).getFieldset();
