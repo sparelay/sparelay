@@ -210,10 +210,10 @@ Content-Type: application/json
 
 プロバイダーを追加する場合：
 
-1. `features/provider/model/<type>/` にスキーマとデフォルト設定を追加します。
+1. `src/features/provider/model/<type>/` にスキーマとデフォルト設定を追加します。
 2. `PROVIDER_REGISTRY`に登録します。
-3. `features/search/server/providers/`にアダプターを追加します。
-4. `features/search/server/create-provider.ts`にファクトリーのエントリを追加します。
+3. `src/features/search/server/providers/`にアダプターを追加します。
+4. `src/features/search/server/create-provider.ts`にファクトリーのエントリを追加します。
 5. プロバイダーにカスタムフィールドが必要な場合はフォームフラグメントを追加します。
 6. リクエスト構築とレスポンス正規化のテストを追加します。
 

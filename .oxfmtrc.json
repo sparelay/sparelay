@@ -21,7 +21,7 @@
     "sortSideEffects": false
   },
   "sortTailwindcss": {
-    "stylesheet": "./app/globals.css",
+    "stylesheet": "./src/app/globals.css",
     "functions": ["cn", "cva"]
   },
   "ignorePatterns": ["drizzle/meta/**", "CHANGELOG.md"]
