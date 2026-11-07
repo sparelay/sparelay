@@ -210,10 +210,10 @@ Please keep changes focused and include tests for behavior changes.
 
 When adding a provider:
 
-1. Add its schema and default configuration under `features/provider/model/<type>/`.
+1. Add its schema and default configuration under `src/features/provider/model/<type>/`.
 2. Register it in `PROVIDER_REGISTRY`.
-3. Add its adapter under `features/search/server/providers/`.
-4. Add the factory entry in `features/search/server/create-provider.ts`.
+3. Add its adapter under `src/features/search/server/providers/`.
+4. Add the factory entry in `src/features/search/server/create-provider.ts`.
 5. Add a form fragment if the provider needs custom fields.
 6. Add tests for request building and response normalization.
 
