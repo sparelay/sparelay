@@ -13,9 +13,10 @@ import {
 } from "@/shared/components/ui/select";
 
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
+import { useExtraFields } from "./use-extra-fields";
 
-export function ParallelExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"parallel">) {
-  const f = extra.getFieldset();
+export function ParallelExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+  const f = useExtraFields<"parallel">(formId).getFieldset();
   const modeControl = useInputControl<string>({
     name: f.mode.name,
     formId,

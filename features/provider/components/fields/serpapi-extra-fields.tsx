@@ -13,9 +13,10 @@ import {
 } from "@/shared/components/ui/select";
 
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
+import { useExtraFields } from "./use-extra-fields";
 
-export function SerpapiExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"serpapi">) {
-  const f = extra.getFieldset();
+export function SerpapiExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+  const f = useExtraFields<"serpapi">(formId).getFieldset();
   const deviceControl = useInputControl<string>({
     name: f.device.name,
     formId,

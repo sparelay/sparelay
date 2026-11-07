@@ -13,9 +13,10 @@ import {
 } from "@/shared/components/ui/select";
 
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
+import { useExtraFields } from "./use-extra-fields";
 
-export function TavilyExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"tavily">) {
-  const f = extra.getFieldset();
+export function TavilyExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+  const f = useExtraFields<"tavily">(formId).getFieldset();
   const searchDepthControl = useInputControl<string>({
     name: f.searchDepth.name,
     formId,

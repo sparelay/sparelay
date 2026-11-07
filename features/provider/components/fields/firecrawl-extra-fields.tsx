@@ -13,9 +13,10 @@ import {
 } from "@/shared/components/ui/select";
 
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
+import { useExtraFields } from "./use-extra-fields";
 
-export function FirecrawlExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"firecrawl">) {
-  const f = extra.getFieldset();
+export function FirecrawlExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+  const f = useExtraFields<"firecrawl">(formId).getFieldset();
   const safeControl = useInputControl<string>({
     name: f.safe.name,
     formId,

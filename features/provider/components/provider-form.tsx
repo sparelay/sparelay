@@ -1,6 +1,6 @@
 "use client";
 
-import { getFormProps, getInputProps, type FieldMetadata } from "@conform-to/react";
+import { FormProvider, getFormProps, getInputProps } from "@conform-to/react";
 import { useEffect, type ComponentType } from "react";
 import { toast } from "sonner";
 import type { z } from "zod";
@@ -46,12 +46,7 @@ const EXTRA_FIELDS = {
   zenserp: ZenserpExtraFields,
   firecrawl: FirecrawlExtraFields,
   scrapedo: ScrapedoExtraFields,
-} satisfies { [K in ProviderType]: ComponentType<ProviderFormExtraFieldsProps<K>> };
-
-type ExtraFieldsComponent = ComponentType<{
-  formId: string;
-  extra: FieldMetadata<Record<string, unknown>>;
-}>;
+} satisfies Record<ProviderType, ComponentType<ProviderFormExtraFieldsProps>>;
 
 type DefaultsShape = {
   name: z.ZodType;
@@ -108,45 +103,47 @@ export function ProviderForm({ mode, type, provider, onSaved, onCancel }: Props)
     }
   }, [state, onSaved]);
 
-  const ExtraFields = EXTRA_FIELDS[activeType] as unknown as ExtraFieldsComponent;
+  const ExtraFields = EXTRA_FIELDS[activeType];
 
   return (
-    <form {...getFormProps(form)} action={formAction} className="flex flex-col gap-6">
-      {form.errors && <p className="text-sm text-destructive">{form.errors.join(", ")}</p>}
+    <FormProvider context={form.context}>
+      <form {...getFormProps(form)} action={formAction} className="flex flex-col gap-6">
+        {form.errors && <p className="text-sm text-destructive">{form.errors.join(", ")}</p>}
 
-      {mode === "edit" && <input type="hidden" name="id" value={provider.id} />}
-      <input type="hidden" name={fields.type.name} value={activeType} />
-      <input {...getInputProps(fields.enabled, { type: "hidden" })} />
+        {mode === "edit" && <input type="hidden" name="id" value={provider.id} />}
+        <input type="hidden" name={fields.type.name} value={activeType} />
+        <input {...getInputProps(fields.enabled, { type: "hidden" })} />
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-base font-semibold">Basic</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <NameField field={fields.name} />
-          <BaseUrlField field={fields.baseUrl} />
-          <ApiKeyField field={fields.apiKey} mode={mode} />
-          <TimeoutField field={fields.timeoutSec} />
-          <CooldownField field={fields.cooldown} />
-          <FallbackField formId={form.id} field={fields.fallbackOnEmpty} />
-        </div>
-      </section>
+        <section className="flex flex-col gap-3">
+          <h2 className="text-base font-semibold">Basic</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <NameField field={fields.name} />
+            <BaseUrlField field={fields.baseUrl} />
+            <ApiKeyField field={fields.apiKey} mode={mode} />
+            <TimeoutField field={fields.timeoutSec} />
+            <CooldownField field={fields.cooldown} />
+            <FallbackField formId={form.id} field={fields.fallbackOnEmpty} />
+          </div>
+        </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-base font-semibold">Advanced</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <ExtraFields formId={form.id} extra={fields.extra} />
-        </div>
-      </section>
+        <section className="flex flex-col gap-3">
+          <h2 className="text-base font-semibold">Advanced</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <ExtraFields formId={form.id} />
+          </div>
+        </section>
 
-      <div className="sticky bottom-0 z-10 mt-6 flex flex-col-reverse gap-2 border-t bg-background/95 py-3 backdrop-blur sm:flex-row sm:justify-end">
-        {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+        <div className="sticky bottom-0 z-10 mt-6 flex flex-col-reverse gap-2 border-t bg-background/95 py-3 backdrop-blur sm:flex-row sm:justify-end">
+          {onCancel && (
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancel
+            </Button>
+          )}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Saving…" : mode === "edit" ? "Save" : "Add"}
           </Button>
-        )}
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving…" : mode === "edit" ? "Save" : "Add"}
-        </Button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </FormProvider>
   );
 }

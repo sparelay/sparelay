@@ -13,9 +13,10 @@ import {
 } from "@/shared/components/ui/select";
 
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
+import { useExtraFields } from "./use-extra-fields";
 
-export function YoucomExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"youcom">) {
-  const f = extra.getFieldset();
+export function YoucomExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+  const f = useExtraFields<"youcom">(formId).getFieldset();
   const freshnessControl = useInputControl<string>({
     name: f.freshness.name,
     formId,

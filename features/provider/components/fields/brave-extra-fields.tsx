@@ -13,9 +13,10 @@ import {
 } from "@/shared/components/ui/select";
 
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
+import { useExtraFields } from "./use-extra-fields";
 
-export function BraveExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"brave">) {
-  const f = extra.getFieldset();
+export function BraveExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+  const f = useExtraFields<"brave">(formId).getFieldset();
   const safesearchControl = useInputControl<string>({
     name: f.safesearch.name,
     formId,
