@@ -49,11 +49,11 @@ describe("tavily form schema", () => {
     ).toBe(false);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(tavilyFormSchema.parse({ ...tavilyForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(tavilyFormSchema.parse({ ...tavilyForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.tavily.com",
     );
-    expect(tavilyProviderConfigSchema.parse({ ...tavilyConfig, baseUrl: "" }).baseUrl).toBe(
+    expect(tavilyProviderConfigSchema.parse({ ...tavilyConfig, baseUrl: undefined }).baseUrl).toBe(
       "https://api.tavily.com",
     );
   });

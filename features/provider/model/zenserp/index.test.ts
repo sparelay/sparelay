@@ -42,12 +42,12 @@ describe("zenserp form schema", () => {
     ).toBe(false);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(zenserpFormSchema.parse({ ...zenserpForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(zenserpFormSchema.parse({ ...zenserpForm, baseUrl: undefined }).baseUrl).toBe(
       "https://app.zenserp.com",
     );
-    expect(zenserpProviderConfigSchema.parse({ ...zenserpConfig, baseUrl: "" }).baseUrl).toBe(
-      "https://app.zenserp.com",
-    );
+    expect(
+      zenserpProviderConfigSchema.parse({ ...zenserpConfig, baseUrl: undefined }).baseUrl,
+    ).toBe("https://app.zenserp.com");
   });
 });

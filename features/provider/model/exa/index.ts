@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateOptionalIntStringSchema,
   generateProviderConfigSchema,
   optionalDateStringSchema,
@@ -34,7 +33,7 @@ export const exaExtraFieldsSchema = z
 
 export const exaFormSchema = commonFieldsSchema.extend({
   type: z.literal("exa"),
-  baseUrl: generateDefaultedBaseUrlSchema(EXA_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(EXA_DEFAULT_BASE_URL),
   extra: exaExtraFieldsSchema,
 });
 

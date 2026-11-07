@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalDateStringSchema,
 } from "../common";
@@ -24,7 +23,7 @@ export const linkupExtraFieldsSchema = z
 
 export const linkupFormSchema = commonFieldsSchema.extend({
   type: z.literal("linkup"),
-  baseUrl: generateDefaultedBaseUrlSchema(LINKUP_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(LINKUP_DEFAULT_BASE_URL),
   extra: linkupExtraFieldsSchema,
 });
 

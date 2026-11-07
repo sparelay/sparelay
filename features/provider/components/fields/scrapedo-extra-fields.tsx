@@ -12,10 +12,11 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
+import { useExtraFields } from "../../hooks/use-extra-fields";
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 
-export function ScrapedoExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"scrapedo">) {
-  const f = extra.getFieldset();
+export function ScrapedoExtraFields({ formId }: ProviderFormExtraFieldsProps<"scrapedo">) {
+  const f = useExtraFields<"scrapedo">(formId).getFieldset();
   const deviceControl = useInputControl<string>({
     name: f.device.name,
     formId,

@@ -7,17 +7,16 @@ import { Input } from "@/shared/components/ui/input";
 
 interface Props {
   field: FieldMetadata;
-  placeholder?: string;
 }
 
-export function BaseUrlField({ field, placeholder }: Props) {
+export function BaseUrlField({ field }: Props) {
   const required = Boolean(field.required);
   return (
     <Field data-invalid={!field.valid || undefined}>
       <FieldLabel htmlFor={field.id}>
         Base URL {required && <span className="text-red-600">*</span>}
       </FieldLabel>
-      <Input {...getInputProps(field, { type: "text" })} placeholder={placeholder} />
+      <Input {...getInputProps(field, { type: "text" })} />
       <FieldError>{field.errors?.[0]}</FieldError>
     </Field>
   );

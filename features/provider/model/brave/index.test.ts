@@ -43,11 +43,11 @@ describe("brave form schema", () => {
     );
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(braveFormSchema.parse({ ...braveForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(braveFormSchema.parse({ ...braveForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.search.brave.com",
     );
-    expect(braveProviderConfigSchema.parse({ ...braveConfig, baseUrl: "" }).baseUrl).toBe(
+    expect(braveProviderConfigSchema.parse({ ...braveConfig, baseUrl: undefined }).baseUrl).toBe(
       "https://api.search.brave.com",
     );
   });

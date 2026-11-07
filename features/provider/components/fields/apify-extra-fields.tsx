@@ -12,11 +12,12 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
+import { useExtraFields } from "../../hooks/use-extra-fields";
 import { APIFY_DEFAULT_ACTOR_ID } from "../../model/apify";
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 
-export function ApifyExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"apify">) {
-  const f = extra.getFieldset();
+export function ApifyExtraFields({ formId }: ProviderFormExtraFieldsProps<"apify">) {
+  const f = useExtraFields<"apify">(formId).getFieldset();
   const mobileResultsControl = useInputControl<string>({
     name: f.mobileResults.name,
     formId,

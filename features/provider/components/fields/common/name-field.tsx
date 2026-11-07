@@ -16,7 +16,7 @@ export function NameField({ field }: Props) {
       <FieldLabel htmlFor={field.id}>
         Name {required && <span className="text-red-600">*</span>}
       </FieldLabel>
-      <Input {...getInputProps(field, { type: "text" })} placeholder="e.g. Primary SearXNG" />
+      <Input {...getInputProps(field, { type: "text" })} placeholder="e.g. Primary search" />
       <FieldError>{field.errors?.[0]}</FieldError>
     </Field>
   );

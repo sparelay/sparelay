@@ -12,10 +12,11 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
+import { useExtraFields } from "../../hooks/use-extra-fields";
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 
-export function ZenserpExtraFields({ formId, extra }: ProviderFormExtraFieldsProps<"zenserp">) {
-  const f = extra.getFieldset();
+export function ZenserpExtraFields({ formId }: ProviderFormExtraFieldsProps<"zenserp">) {
+  const f = useExtraFields<"zenserp">(formId).getFieldset();
   const engineControl = useInputControl<string>({
     name: f.engine.name,
     formId,

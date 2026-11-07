@@ -42,11 +42,11 @@ describe("linkup form schema", () => {
     ).toBe(false);
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(linkupFormSchema.parse({ ...linkupForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(linkupFormSchema.parse({ ...linkupForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.linkup.so",
     );
-    expect(linkupProviderConfigSchema.parse({ ...linkupConfig, baseUrl: "" }).baseUrl).toBe(
+    expect(linkupProviderConfigSchema.parse({ ...linkupConfig, baseUrl: undefined }).baseUrl).toBe(
       "https://api.linkup.so",
     );
   });

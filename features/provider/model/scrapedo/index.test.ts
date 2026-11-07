@@ -53,12 +53,12 @@ describe("scrapedo form schema", () => {
     );
   });
 
-  it("uses the default base URL when blank", () => {
-    expect(scrapedoFormSchema.parse({ ...scrapedoForm, baseUrl: "" }).baseUrl).toBe(
+  it("uses the default base URL when omitted", () => {
+    expect(scrapedoFormSchema.parse({ ...scrapedoForm, baseUrl: undefined }).baseUrl).toBe(
       "https://api.scrape.do",
     );
-    expect(scrapedoProviderConfigSchema.parse({ ...scrapedoConfig, baseUrl: "" }).baseUrl).toBe(
-      "https://api.scrape.do",
-    );
+    expect(
+      scrapedoProviderConfigSchema.parse({ ...scrapedoConfig, baseUrl: undefined }).baseUrl,
+    ).toBe("https://api.scrape.do");
   });
 });

@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalCountryCodeSchema,
 } from "../common";
@@ -27,7 +26,7 @@ export const zenserpExtraFieldsSchema = z
 
 export const zenserpFormSchema = commonFieldsSchema.extend({
   type: z.literal("zenserp"),
-  baseUrl: generateDefaultedBaseUrlSchema(ZENSERP_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(ZENSERP_DEFAULT_BASE_URL),
   extra: zenserpExtraFieldsSchema,
 });
 

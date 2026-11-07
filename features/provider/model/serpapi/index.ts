@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalCountryCodeSchema,
 } from "../common";
@@ -29,7 +28,7 @@ export const serpapiExtraFieldsSchema = z
 
 export const serpapiFormSchema = commonFieldsSchema.extend({
   type: z.literal("serpapi"),
-  baseUrl: generateDefaultedBaseUrlSchema(SERPAPI_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(SERPAPI_DEFAULT_BASE_URL),
   extra: serpapiExtraFieldsSchema,
 });
 

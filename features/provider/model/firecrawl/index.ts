@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalCountryCodeSchema,
   optionalTrueStringSchema,
@@ -27,7 +26,7 @@ export const firecrawlExtraFieldsSchema = z
 
 export const firecrawlFormSchema = commonFieldsSchema.extend({
   type: z.literal("firecrawl"),
-  baseUrl: generateDefaultedBaseUrlSchema(FIRECRAWL_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(FIRECRAWL_DEFAULT_BASE_URL),
   apiKey: z.string().trim().optional().default(""),
   extra: firecrawlExtraFieldsSchema,
 });

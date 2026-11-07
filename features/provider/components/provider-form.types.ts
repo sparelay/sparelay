@@ -1,10 +1,7 @@
-import type { FieldMetadata } from "@conform-to/react";
-import type { z } from "zod";
-
 import type { ProviderType } from "../model/provider";
-import type { ProviderExtraFieldsSchema } from "../model/provider-form";
 
 export interface ProviderFormExtraFieldsProps<T extends ProviderType> {
   formId: string;
-  extra: FieldMetadata<z.output<ProviderExtraFieldsSchema<T>>>;
+  /** Type-only marker so EXTRA_FIELDS stays keyed by provider. Never passed at runtime. */
+  readonly __providerType?: T;
 }

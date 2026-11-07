@@ -2,7 +2,6 @@ import { z } from "@/shared/lib/zod";
 
 import {
   commonFieldsSchema,
-  generateDefaultedBaseUrlSchema,
   generateProviderConfigSchema,
   optionalDateStringSchema,
   optionalTrueStringSchema,
@@ -43,7 +42,7 @@ export const tavilyExtraFieldsSchema = z
 export const tavilyFormSchema = z.object({
   ...commonFieldsSchema.shape,
   type: z.literal("tavily"),
-  baseUrl: generateDefaultedBaseUrlSchema(TAVILY_DEFAULT_BASE_URL),
+  baseUrl: commonFieldsSchema.shape.baseUrl.default(TAVILY_DEFAULT_BASE_URL),
   extra: tavilyExtraFieldsSchema,
 });
 
