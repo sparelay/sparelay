@@ -4,8 +4,9 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
 import { createLog } from "@/features/logs/server/create-log";
 import { searchInputSchema } from "@/features/search/model/search";
 import { search } from "@/features/search/server/search";
-import pkg from "@/package.json";
 import { requireApiKey } from "@/shared/auth/guard";
+
+import pkg from "../../../package.json";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
