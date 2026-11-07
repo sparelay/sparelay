@@ -17,6 +17,7 @@ describe("toProviderType", () => {
     expect(toProviderType("zenserp")).toBe("zenserp");
     expect(toProviderType("firecrawl")).toBe("firecrawl");
     expect(toProviderType("scrapedo")).toBe("scrapedo");
+    expect(toProviderType("brightdata")).toBe("brightdata");
   });
 
   it("returns null for unknown values", () => {

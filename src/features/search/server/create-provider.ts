@@ -1,6 +1,7 @@
 import "server-only";
 import { apifyProviderConfigSchema } from "@/features/provider/model/apify";
 import { braveProviderConfigSchema } from "@/features/provider/model/brave";
+import { brightdataProviderConfigSchema } from "@/features/provider/model/brightdata";
 import { exaProviderConfigSchema } from "@/features/provider/model/exa";
 import { firecrawlProviderConfigSchema } from "@/features/provider/model/firecrawl";
 import { linkupProviderConfigSchema } from "@/features/provider/model/linkup";
@@ -18,6 +19,7 @@ import type { ProviderRow } from "@/shared/db/types";
 import type { SearchProvider } from "../model/provider";
 import { ApifyProvider } from "./providers/apify";
 import { BraveProvider } from "./providers/brave";
+import { BrightdataProvider } from "./providers/brightdata";
 import { ExaProvider } from "./providers/exa";
 import { FirecrawlProvider } from "./providers/firecrawl";
 import { LinkupProvider } from "./providers/linkup";
@@ -46,6 +48,7 @@ const FACTORIES: Record<ProviderType, ProviderFactory> = {
   zenserp: (row) => new ZenserpProvider(zenserpProviderConfigSchema.parse(row)),
   firecrawl: (row) => new FirecrawlProvider(firecrawlProviderConfigSchema.parse(row)),
   scrapedo: (row) => new ScrapedoProvider(scrapedoProviderConfigSchema.parse(row)),
+  brightdata: (row) => new BrightdataProvider(brightdataProviderConfigSchema.parse(row)),
 };
 
 export function createProvider(p: ProviderRow): SearchProvider {

@@ -2,6 +2,7 @@ import { z } from "@/shared/lib/zod";
 
 import { apifyFormSchema } from "./apify";
 import { braveFormSchema } from "./brave";
+import { brightdataFormSchema } from "./brightdata";
 import { exaFormSchema } from "./exa";
 import { firecrawlFormSchema } from "./firecrawl";
 import { linkupFormSchema } from "./linkup";
@@ -106,6 +107,11 @@ export const PROVIDER_REGISTRY = {
     label: "Scrape.do",
     icon: { light: "/assets/images/brand/scrapedo.svg" },
     schema: generateFormSchema(scrapedoFormSchema),
+  },
+  brightdata: {
+    label: "Bright Data",
+    icon: { light: "/assets/images/brand/brightdata.svg" },
+    schema: generateFormSchema(brightdataFormSchema),
   },
 } satisfies Record<string, ProviderMeta>;
 

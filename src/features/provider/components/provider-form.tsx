@@ -14,6 +14,7 @@ import {
   ApifyExtraFields,
   BaseUrlField,
   BraveExtraFields,
+  BrightdataExtraFields,
   CooldownField,
   ExaExtraFields,
   FirecrawlExtraFields,
@@ -46,6 +47,7 @@ const EXTRA_FIELDS = {
   zenserp: ZenserpExtraFields,
   firecrawl: FirecrawlExtraFields,
   scrapedo: ScrapedoExtraFields,
+  brightdata: BrightdataExtraFields,
 } satisfies { [K in ProviderType]: ComponentType<ProviderFormExtraFieldsProps<K>> };
 
 type DefaultsShape = {
