@@ -6,6 +6,7 @@ export { NameField } from "./common/name-field";
 export { TimeoutField } from "./common/timeout-field";
 export { ApifyExtraFields } from "./apify-extra-fields";
 export { BraveExtraFields } from "./brave-extra-fields";
+export { BrightdataExtraFields } from "./brightdata-extra-fields";
 export { ExaExtraFields } from "./exa-extra-fields";
 export { FirecrawlExtraFields } from "./firecrawl-extra-fields";
 export { LinkupExtraFields } from "./linkup-extra-fields";

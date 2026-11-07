@@ -3,17 +3,18 @@
 import { FormProvider, getFormProps, getInputProps } from "@conform-to/react";
 import { useEffect, type ComponentType } from "react";
 import { toast } from "sonner";
-import type { z } from "zod";
 
 import { Button } from "@/shared/components/ui/button";
 
 import { useProviderForm } from "../hooks/use-provider-form";
+import { getSchemaDefaults } from "../lib/get-schema-defaults";
 import { PROVIDER_REGISTRY, type ProviderOutput, type ProviderType } from "../model/provider";
 import {
   ApiKeyField,
   ApifyExtraFields,
   BaseUrlField,
   BraveExtraFields,
+  BrightdataExtraFields,
   CooldownField,
   ExaExtraFields,
   FirecrawlExtraFields,
@@ -46,28 +47,8 @@ const EXTRA_FIELDS = {
   zenserp: ZenserpExtraFields,
   firecrawl: FirecrawlExtraFields,
   scrapedo: ScrapedoExtraFields,
+  brightdata: BrightdataExtraFields,
 } satisfies { [K in ProviderType]: ComponentType<ProviderFormExtraFieldsProps<K>> };
-
-type DefaultsShape = {
-  name: z.ZodType;
-  apiKey: z.ZodType;
-  type: z.ZodType;
-  baseUrl: z.ZodType;
-  extra: z.ZodType;
-} & z.ZodRawShape;
-
-function getSchemaDefaults<T extends z.ZodObject<DefaultsShape>>(schema: T) {
-  const defaults = schema
-    .omit({
-      name: true,
-      apiKey: true,
-      type: true,
-      baseUrl: true,
-    })
-    .parse({ extra: {} });
-  const baseUrl = schema.shape.baseUrl.safeParse(undefined);
-  return baseUrl.success ? { ...defaults, baseUrl: baseUrl.data } : defaults;
-}
 
 type Props =
   | {

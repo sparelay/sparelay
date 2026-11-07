@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { apifyProviderConfigSchema } from "@/features/provider/model/apify";
 import { braveProviderConfigSchema } from "@/features/provider/model/brave";
+import { brightdataProviderConfigSchema } from "@/features/provider/model/brightdata";
 import { exaProviderConfigSchema } from "@/features/provider/model/exa";
 import { firecrawlProviderConfigSchema } from "@/features/provider/model/firecrawl";
 import { linkupProviderConfigSchema } from "@/features/provider/model/linkup";
@@ -16,6 +17,7 @@ import { zenserpProviderConfigSchema } from "@/features/provider/model/zenserp";
 
 import { ApifyProvider } from "./apify";
 import { BraveProvider } from "./brave";
+import { BrightdataProvider } from "./brightdata";
 import { ExaProvider } from "./exa";
 import { FirecrawlProvider } from "./firecrawl";
 import { LinkupProvider } from "./linkup";
@@ -817,6 +819,137 @@ describe("SerpapiProvider", () => {
     });
     await expect(new SerpapiProvider(config).search("q", 5, 1000)).rejects.toThrow(
       "serpapi: Invalid API key",
+    );
+  });
+});
+
+describe("BrightdataProvider", () => {
+  it("sends a Google search through the request endpoint and maps organic results", async () => {
+    const fetchMock = vi.fn(async (_url: RequestInfo | URL, _init?: RequestInit) =>
+      jsonResponse({
+        organic: [
+          { link: "https://a", title: "A", description: "a" },
+          { title: "no link" },
+          { url: "https://b", title: "B", snippet: "b" },
+        ],
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const config = brightdataProviderConfigSchema.parse({
+      id: "p1",
+      name: "Bright Data",
+      baseUrl: "https://api.brightdata.test/",
+      apiKey: "bk",
+      extra: { zone: "serp_api1", domain: "google.co.jp", gl: "JP", hl: "ja", safe: "active" },
+    });
+    const results = await new BrightdataProvider(config).search("hello", 5, 1000);
+
+    expect(results).toEqual([
+      { link: "https://a", title: "A", snippet: "a" },
+      { link: "https://b", title: "B", snippet: "b" },
+    ]);
+    const call = fetchMock.mock.calls[0];
+    expect(String(call?.[0])).toBe("https://api.brightdata.test/request");
+    expect(call?.[1]?.method).toBe("POST");
+    expect(call?.[1]?.headers).toMatchObject({
+      "Content-Type": "application/json",
+      Authorization: "Bearer bk",
+    });
+    const body = JSON.parse(String(call?.[1]?.body));
+    expect(body.zone).toBe("serp_api1");
+    expect(body.format).toBe("raw");
+    expect(body.data_format).toBe("parsed_light");
+    expect(body.country).toBe("jp");
+    const url = new URL(body.url);
+    expect(url.origin).toBe("https://www.google.co.jp");
+    expect(url.searchParams.get("q")).toBe("hello");
+    expect(url.searchParams.get("num")).toBe("5");
+    expect(url.searchParams.get("gl")).toBe("jp");
+    expect(url.searchParams.get("hl")).toBe("ja");
+    expect(url.searchParams.get("safe")).toBe("active");
+  });
+
+  it("builds a Bing URL with Bing-specific parameters", async () => {
+    const fetchMock = vi.fn(async (_url: RequestInfo | URL, _init?: RequestInit) =>
+      jsonResponse({
+        webPages: {
+          value: [{ url: "https://a", name: "A", snippet: "a" }],
+        },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const config = brightdataProviderConfigSchema.parse({
+      id: "p1",
+      name: "Bright Data",
+      baseUrl: "https://api.brightdata.test",
+      apiKey: "bk",
+      extra: { zone: "serp_api1", engine: "bing", gl: "US", hl: "en", safe: "active" },
+    });
+    const results = await new BrightdataProvider(config).search("hello", 100, 1000);
+
+    expect(results).toEqual([{ link: "https://a", title: "A", snippet: "a" }]);
+    const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+    expect(body.format).toBe("raw");
+    expect(body.data_format).toBe("parsed_bing_api");
+    const url = new URL(body.url);
+    expect(url.origin).toBe("https://www.bing.com");
+    expect(url.searchParams.get("q")).toBe("hello");
+    expect(url.searchParams.get("count")).toBe("50");
+    expect(url.searchParams.get("cc")).toBe("us");
+    expect(url.searchParams.get("setlang")).toBe("en");
+    expect(url.searchParams.get("adlt")).toBe("strict");
+  });
+
+  it("throws when the response is not a parsed SERP payload", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse({ status_code: 200, body: "<html></html>" })),
+    );
+    const config = brightdataProviderConfigSchema.parse({
+      id: "p1",
+      name: "Bright Data",
+      baseUrl: "https://api.brightdata.test",
+      apiKey: "bk",
+      extra: { zone: "serp_api1" },
+    });
+    await expect(new BrightdataProvider(config).search("q", 5, 1000)).rejects.toThrow(
+      "brightdata: unexpected response format",
+    );
+  });
+
+  it("throws when Bright Data returns an error payload", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse({ error: "Invalid zone" })),
+    );
+    const config = brightdataProviderConfigSchema.parse({
+      id: "p1",
+      name: "Bright Data",
+      baseUrl: "https://api.brightdata.test",
+      apiKey: "bk",
+      extra: { zone: "serp_api1" },
+    });
+    await expect(new BrightdataProvider(config).search("q", 5, 1000)).rejects.toThrow(
+      "brightdata: Invalid zone",
+    );
+  });
+
+  it("throws on a non-ok response", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("Too many requests", { status: 429 })),
+    );
+    const config = brightdataProviderConfigSchema.parse({
+      id: "p1",
+      name: "Bright Data",
+      baseUrl: "https://api.brightdata.test",
+      apiKey: "bk",
+      extra: { zone: "serp_api1" },
+    });
+    await expect(new BrightdataProvider(config).search("q", 5, 1000)).rejects.toThrow(
+      "brightdata: Too many requests",
     );
   });
 });

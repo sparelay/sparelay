@@ -17,6 +17,7 @@ describe("providerTypeSchema", () => {
     expect(providerTypeSchema.safeParse("zenserp").success).toBe(true);
     expect(providerTypeSchema.safeParse("firecrawl").success).toBe(true);
     expect(providerTypeSchema.safeParse("scrapedo").success).toBe(true);
+    expect(providerTypeSchema.safeParse("brightdata").success).toBe(true);
   });
 
   it("rejects unknown values", () => {

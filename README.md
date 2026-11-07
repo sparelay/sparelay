@@ -22,7 +22,7 @@ It ships with a web UI for provider management, a search playground, usage analy
 ## Features
 
 - **Fallback-first routing.** Providers are tried in a drag-and-drop order. Failures, timeouts, empty result sets, and `429` responses move the request to the next provider.
-- **Bring your own search.** Use commercial APIs such as Tavily, Brave, Exa, and SerpApi, or self-hosted engines such as SearXNG and Mwmbl.
+- **Bring your own search.** Use commercial APIs such as Tavily, Brave, Exa, SerpApi, and Bright Data, or self-hosted engines such as SearXNG and Mwmbl.
 - **One interface for everything.** OpenWebUI-compatible HTTP search, an MCP tool for agents, and a browser playground share the same fallback engine.
 - **Cooldown awareness.** A `429` puts that provider on cooldown for a configurable window instead of hammering it on every request.
 - **Observability built in.** Track total searches, successes, success rate, average latency, P95 latency, fallbacks, per-provider stats, and trends over 1 hour to 30 days.
@@ -160,21 +160,22 @@ Example client configuration:
 
 ## Supported providers
 
-| Provider  | API key  | Default base URL               |
-| --------- | -------- | ------------------------------ |
-| SearXNG   | Optional | Your own instance              |
-| Exa       | Required | `https://api.exa.ai`           |
-| Tavily    | Required | `https://api.tavily.com`       |
-| Parallel  | Required | `https://api.parallel.ai`      |
-| Linkup    | Required | `https://api.linkup.so`        |
-| You.com   | Required | `https://ydc-index.io`         |
-| Mwmbl     | Optional | `https://mwmbl.org`            |
-| Brave     | Required | `https://api.search.brave.com` |
-| Apify     | Required | `https://api.apify.com`        |
-| SerpApi   | Required | `https://serpapi.com`          |
-| Zenserp   | Required | `https://app.zenserp.com`      |
-| Firecrawl | Optional | `https://api.firecrawl.dev`    |
-| Scrape.do | Required | `https://api.scrape.do`        |
+| Provider    | API key  | Default base URL               |
+| ----------- | -------- | ------------------------------ |
+| SearXNG     | Optional | Your own instance              |
+| Exa         | Required | `https://api.exa.ai`           |
+| Tavily      | Required | `https://api.tavily.com`       |
+| Parallel    | Required | `https://api.parallel.ai`      |
+| Linkup      | Required | `https://api.linkup.so`        |
+| You.com     | Required | `https://ydc-index.io`         |
+| Mwmbl       | Optional | `https://mwmbl.org`            |
+| Brave       | Required | `https://api.search.brave.com` |
+| Apify       | Required | `https://api.apify.com`        |
+| SerpApi     | Required | `https://serpapi.com`          |
+| Zenserp     | Required | `https://app.zenserp.com`      |
+| Firecrawl   | Optional | `https://api.firecrawl.dev`    |
+| Scrape.do   | Required | `https://api.scrape.do`        |
+| Bright Data | Required | `https://api.brightdata.com`   |
 
 If you need an additional provider, please open a pull request.
 

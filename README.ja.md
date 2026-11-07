@@ -22,7 +22,7 @@ Sparelayはアプリケーションと検索APIの間に立ちます。契約済
 ## 機能
 
 - **フォールバック優先のルーティング**。プロバイダーはドラッグ&ドロップで並べた順に試されます。失敗、タイムアウト、空の結果セット（`fallbackOnEmpty`が有効な場合）、`429`応答が発生すると、次のプロバイダーにリクエストを移動します。
-- **好きな検索サービスを持ち込める**。Tavily、Brave、Exa、SerpApiなどの商用APIでも、SearXNGやMwmblなどのセルフホスト型エンジンでも利用できます。
+- **好きな検索サービスを持ち込める**。Tavily、Brave、Exa、SerpApi、Bright Dataなどの商用APIでも、SearXNGやMwmblなどのセルフホスト型エンジンでも利用できます。
 - **すべてを1つのインターフェースで**。OpenWebUI互換のHTTP検索、エージェント向けのMCPツール、ブラウザのプレイグラウンドが同じフォールバックエンジンを共有します。
 - **クールダウンを考慮**。`429`を受け取ると、設定した期間そのプロバイダーをクールダウン状態にし、毎回のリクエストで叩き続けることを防ぎます。
 - **標準で可観測性を搭載**。総検索数、成功数、成功率、平均レイテンシ、P95レイテンシ、フォールバック数、プロバイダー別統計、1時間〜30日のトレンドを確認できます。
@@ -175,6 +175,7 @@ Content-Type: application/json
 | Zenserp      | 必須    | `https://app.zenserp.com`      |
 | Firecrawl    | 任意    | `https://api.firecrawl.dev`    |
 | Scrape.do    | 必須    | `https://api.scrape.do`        |
+| Bright Data  | 必須    | `https://api.brightdata.com`   |
 
 追加のプロバイダーが必要な場合は、PRを出してください。
 
