@@ -8,13 +8,6 @@ type DefaultsShape = {
   extra: z.ZodType;
 } & z.ZodRawShape;
 
-/**
- * Builds the initial form values from a provider schema.
- *
- * The extra object is parsed separately: a provider can have required extra
- * fields (for example Bright Data's zone) which should start empty and be
- * reported as required on submit instead of failing the defaults parse.
- */
 export function getSchemaDefaults<T extends z.ZodObject<DefaultsShape>>(schema: T) {
   const defaults = schema
     .pick({
