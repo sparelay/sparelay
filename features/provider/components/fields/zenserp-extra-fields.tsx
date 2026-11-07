@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function ZenserpExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function ZenserpExtraFields({ formId }: ProviderFormExtraFieldsProps<"zenserp">) {
   const f = useExtraFields<"zenserp">(formId).getFieldset();
   const engineControl = useInputControl<string>({
     name: f.engine.name,

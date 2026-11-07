@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function LinkupExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function LinkupExtraFields({ formId }: ProviderFormExtraFieldsProps<"linkup">) {
   const f = useExtraFields<"linkup">(formId).getFieldset();
   const depthControl = useInputControl<string>({
     name: f.depth.name,

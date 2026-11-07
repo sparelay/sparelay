@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function SearxngExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function SearxngExtraFields({ formId }: ProviderFormExtraFieldsProps<"searxng">) {
   const f = useExtraFields<"searxng">(formId).getFieldset();
   const timeRangeControl = useInputControl<string>({
     name: f.timeRange.name,

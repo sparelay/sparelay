@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function ParallelExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function ParallelExtraFields({ formId }: ProviderFormExtraFieldsProps<"parallel">) {
   const f = useExtraFields<"parallel">(formId).getFieldset();
   const modeControl = useInputControl<string>({
     name: f.mode.name,

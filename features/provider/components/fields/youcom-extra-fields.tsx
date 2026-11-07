@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function YoucomExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function YoucomExtraFields({ formId }: ProviderFormExtraFieldsProps<"youcom">) {
   const f = useExtraFields<"youcom">(formId).getFieldset();
   const freshnessControl = useInputControl<string>({
     name: f.freshness.name,

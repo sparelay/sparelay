@@ -16,7 +16,7 @@ import { APIFY_DEFAULT_ACTOR_ID } from "../../model/apify";
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function ApifyExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function ApifyExtraFields({ formId }: ProviderFormExtraFieldsProps<"apify">) {
   const f = useExtraFields<"apify">(formId).getFieldset();
   const mobileResultsControl = useInputControl<string>({
     name: f.mobileResults.name,

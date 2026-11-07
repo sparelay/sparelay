@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function TavilyExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function TavilyExtraFields({ formId }: ProviderFormExtraFieldsProps<"tavily">) {
   const f = useExtraFields<"tavily">(formId).getFieldset();
   const searchDepthControl = useInputControl<string>({
     name: f.searchDepth.name,

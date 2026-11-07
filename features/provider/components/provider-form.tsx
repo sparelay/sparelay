@@ -46,7 +46,7 @@ const EXTRA_FIELDS = {
   zenserp: ZenserpExtraFields,
   firecrawl: FirecrawlExtraFields,
   scrapedo: ScrapedoExtraFields,
-} satisfies Record<ProviderType, ComponentType<ProviderFormExtraFieldsProps>>;
+} satisfies { [K in ProviderType]: ComponentType<ProviderFormExtraFieldsProps<K>> };
 
 type DefaultsShape = {
   name: z.ZodType;

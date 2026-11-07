@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function ExaExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function ExaExtraFields({ formId }: ProviderFormExtraFieldsProps<"exa">) {
   const f = useExtraFields<"exa">(formId).getFieldset();
   const typeControl = useInputControl<string>({
     name: f.type.name,

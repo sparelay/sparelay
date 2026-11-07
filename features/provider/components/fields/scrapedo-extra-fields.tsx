@@ -15,7 +15,7 @@ import {
 import type { ProviderFormExtraFieldsProps } from "../provider-form.types";
 import { useExtraFields } from "./use-extra-fields";
 
-export function ScrapedoExtraFields({ formId }: ProviderFormExtraFieldsProps) {
+export function ScrapedoExtraFields({ formId }: ProviderFormExtraFieldsProps<"scrapedo">) {
   const f = useExtraFields<"scrapedo">(formId).getFieldset();
   const deviceControl = useInputControl<string>({
     name: f.device.name,
