@@ -1,51 +1,36 @@
-import type { DefaultValue } from "@conform-to/react";
 import type { z } from "zod";
 
-import type { ProviderType } from "../model/provider";
-import type { ProviderFormSchema } from "../model/provider-form";
-
-type ShapeHolder = {
-  shape?: z.ZodRawShape;
-  def?: { innerType?: ShapeHolder };
-};
-
-function getExtraShape(schema: z.ZodType): z.ZodRawShape {
-  const holder = schema as unknown as ShapeHolder;
-  if (holder.shape) return holder.shape;
-  const inner = holder.def?.innerType;
-  return inner ? getExtraShape(inner as unknown as z.ZodType) : {};
-}
+type DefaultsShape = {
+  name: z.ZodType;
+  apiKey: z.ZodType;
+  type: z.ZodType;
+  baseUrl: z.ZodType;
+  extra: z.ZodType;
+} & z.ZodRawShape;
 
 /**
  * Builds the initial form values from a provider schema.
  *
- * Required extra fields have no default, so they are omitted instead of failing
- * the parse and letting the form report them as required on submit.
+ * The extra object is parsed separately: a provider can have required extra
+ * fields (for example Bright Data's zone) which should start empty and be
+ * reported as required on submit instead of failing the defaults parse.
  */
-export function getSchemaDefaults<T extends ProviderType>(
-  schema: ProviderFormSchema<T, "add">,
-): NonNullable<DefaultValue<z.output<ProviderFormSchema<T, "add">>>> {
+export function getSchemaDefaults<T extends z.ZodObject<DefaultsShape>>(schema: T) {
   const defaults = schema
-    .omit({
-      name: true,
-      apiKey: true,
-      type: true,
-      baseUrl: true,
-      extra: true,
+    .pick({
+      enabled: true,
+      timeoutSec: true,
+      cooldown: true,
+      fallbackOnEmpty: true,
     })
     .parse({});
 
-  const extra = Object.fromEntries(
-    Object.entries(getExtraShape(schema.shape.extra)).flatMap(([key, field]) => {
-      const parsed = (field as z.ZodType).safeParse(undefined);
-      return parsed.success ? [[key, parsed.data]] : [];
-    }),
-  );
+  const extra = schema.pick({ extra: true }).safeParse({ extra: {} });
+  const baseUrl = schema.pick({ baseUrl: true }).safeParse({});
 
-  const baseUrl = schema.shape.baseUrl.safeParse(undefined);
   return {
     ...defaults,
-    extra,
-    ...(baseUrl.success ? { baseUrl: baseUrl.data } : {}),
-  } as NonNullable<DefaultValue<z.output<ProviderFormSchema<T, "add">>>>;
+    extra: extra.success ? extra.data.extra : {},
+    ...(baseUrl.success ? { baseUrl: baseUrl.data.baseUrl } : {}),
+  };
 }

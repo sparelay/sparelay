@@ -1,28 +1,31 @@
 import "server-only";
 import type { BrightdataProviderConfig } from "@/features/provider/model/brightdata";
+import { z } from "@/shared/lib/zod";
 
 import type { SearchProvider } from "../../model/provider";
 import type { SearchResult } from "../../model/search";
 import { fetchWithTimeout } from "../lib/fetch-with-timeout";
 import { ProviderHttpError } from "../lib/provider-http-error";
 
-interface BrightdataOrganicResult {
-  link?: string;
-  url?: string;
-  title?: string;
-  description?: string;
-  snippet?: string;
-}
+const brightdataResponseSchema = z.object({
+  organic: z
+    .array(
+      z.object({
+        link: z.string().nullish(),
+        url: z.string().nullish(),
+        title: z.string().nullish(),
+        description: z.string().nullish(),
+        snippet: z.string().nullish(),
+      }),
+    )
+    .nullish(),
+  error: z.unknown().optional(),
+});
 
-interface BrightdataResponse {
-  organic?: BrightdataOrganicResult[];
-  error?: string;
-}
-
-const SEARCH_URLS = {
+const SEARCH_URLS: Record<"google" | "bing", string> = {
   google: "https://www.google.com/search",
   bing: "https://www.bing.com/search",
-} as const;
+};
 
 function buildSearchUrl(
   query: string,
@@ -49,7 +52,7 @@ function buildSearchUrl(
 }
 
 export class BrightdataProvider implements SearchProvider<BrightdataProviderConfig> {
-  readonly type = "brightdata" as const;
+  readonly type = "brightdata";
 
   constructor(readonly config: BrightdataProviderConfig) {}
 
@@ -83,15 +86,24 @@ export class BrightdataProvider implements SearchProvider<BrightdataProviderConf
       throw new ProviderHttpError("brightdata", res.status, detail);
     }
 
-    const data = (await res.json()) as BrightdataResponse;
-    if (data.error) throw new Error(`brightdata: ${data.error}`);
-    return (data.organic ?? [])
-      .filter((r) => r.link ?? r.url)
-      .slice(0, count)
-      .map((r) => ({
-        link: (r.link ?? r.url) as string,
-        title: r.title ?? "",
-        snippet: r.description ?? r.snippet ?? "",
-      }));
+    const data = brightdataResponseSchema.parse(await res.json());
+    if (data.error !== undefined) {
+      throw new Error(
+        `brightdata: ${typeof data.error === "string" ? data.error : JSON.stringify(data.error)}`,
+      );
+    }
+
+    const results: SearchResult[] = [];
+    for (const result of data.organic ?? []) {
+      const link = result.link ?? result.url;
+      if (!link) continue;
+      results.push({
+        link,
+        title: result.title ?? "",
+        snippet: result.description ?? result.snippet ?? "",
+      });
+      if (results.length >= count) break;
+    }
+    return results;
   }
 }

@@ -30,7 +30,9 @@ export function BrightdataExtraFields({ formId }: ProviderFormExtraFieldsProps<"
   return (
     <>
       <Field data-invalid={!f.zone.valid || undefined}>
-        <FieldLabel htmlFor={f.zone.id}>Zone</FieldLabel>
+        <FieldLabel htmlFor={f.zone.id}>
+          Zone {Boolean(f.zone.required) && <span className="text-red-600">*</span>}
+        </FieldLabel>
         <Input {...getInputProps(f.zone, { type: "text" })} placeholder="serp_api1" />
         <FieldError>{f.zone.errors?.[0]}</FieldError>
       </Field>
