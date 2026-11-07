@@ -858,7 +858,8 @@ describe("BrightdataProvider", () => {
     });
     const body = JSON.parse(String(call?.[1]?.body));
     expect(body.zone).toBe("serp_api1");
-    expect(body.format).toBe("json");
+    expect(body.format).toBe("raw");
+    expect(body.data_format).toBe("parsed_light");
     expect(body.country).toBe("jp");
     const url = new URL(body.url);
     expect(url.origin).toBe("https://www.google.co.jp");
@@ -871,7 +872,11 @@ describe("BrightdataProvider", () => {
 
   it("builds a Bing URL with Bing-specific parameters", async () => {
     const fetchMock = vi.fn(async (_url: RequestInfo | URL, _init?: RequestInit) =>
-      jsonResponse({ organic: [{ url: "https://a", title: "A", snippet: "a" }] }),
+      jsonResponse({
+        webPages: {
+          value: [{ url: "https://a", name: "A", snippet: "a" }],
+        },
+      }),
     );
     vi.stubGlobal("fetch", fetchMock);
 
@@ -882,9 +887,12 @@ describe("BrightdataProvider", () => {
       apiKey: "bk",
       extra: { zone: "serp_api1", engine: "bing", gl: "US", hl: "en", safe: "active" },
     });
-    await new BrightdataProvider(config).search("hello", 100, 1000);
+    const results = await new BrightdataProvider(config).search("hello", 100, 1000);
 
+    expect(results).toEqual([{ link: "https://a", title: "A", snippet: "a" }]);
     const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+    expect(body.format).toBe("raw");
+    expect(body.data_format).toBe("parsed_bing_api");
     const url = new URL(body.url);
     expect(url.origin).toBe("https://www.bing.com");
     expect(url.searchParams.get("q")).toBe("hello");
@@ -892,6 +900,23 @@ describe("BrightdataProvider", () => {
     expect(url.searchParams.get("cc")).toBe("us");
     expect(url.searchParams.get("setlang")).toBe("en");
     expect(url.searchParams.get("adlt")).toBe("strict");
+  });
+
+  it("throws when the response is not a parsed SERP payload", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse({ status_code: 200, body: "<html></html>" })),
+    );
+    const config = brightdataProviderConfigSchema.parse({
+      id: "p1",
+      name: "Bright Data",
+      baseUrl: "https://api.brightdata.test",
+      apiKey: "bk",
+      extra: { zone: "serp_api1" },
+    });
+    await expect(new BrightdataProvider(config).search("q", 5, 1000)).rejects.toThrow(
+      "brightdata: unexpected response format",
+    );
   });
 
   it("throws when Bright Data returns an error payload", async () => {

@@ -7,18 +7,18 @@ import type { SearchResult } from "../../model/search";
 import { fetchWithTimeout } from "../lib/fetch-with-timeout";
 import { ProviderHttpError } from "../lib/provider-http-error";
 
+const brightdataResultSchema = z.object({
+  link: z.string().nullish(),
+  url: z.string().nullish(),
+  title: z.string().nullish(),
+  name: z.string().nullish(),
+  description: z.string().nullish(),
+  snippet: z.string().nullish(),
+});
+
 const brightdataResponseSchema = z.object({
-  organic: z
-    .array(
-      z.object({
-        link: z.string().nullish(),
-        url: z.string().nullish(),
-        title: z.string().nullish(),
-        description: z.string().nullish(),
-        snippet: z.string().nullish(),
-      }),
-    )
-    .nullish(),
+  organic: z.array(brightdataResultSchema).nullish(),
+  webPages: z.object({ value: z.array(brightdataResultSchema).nullish() }).nullish(),
   error: z.unknown().optional(),
 });
 
@@ -57,7 +57,8 @@ export class BrightdataProvider implements SearchProvider<BrightdataProviderConf
     const body: Record<string, unknown> = {
       zone: this.config.extra.zone,
       url: buildSearchUrl(query, count, this.config.extra),
-      format: "json",
+      format: "raw",
+      data_format: this.config.extra.engine === "bing" ? "parsed_bing_api" : "parsed_light",
     };
     if (this.config.extra.gl) body.country = this.config.extra.gl.toLowerCase();
 
@@ -89,13 +90,18 @@ export class BrightdataProvider implements SearchProvider<BrightdataProviderConf
       );
     }
 
+    const items = data.organic ?? data.webPages?.value ?? undefined;
+    if (items === undefined) {
+      throw new Error("brightdata: unexpected response format");
+    }
+
     const results: SearchResult[] = [];
-    for (const result of data.organic ?? []) {
+    for (const result of items) {
       const link = result.link ?? result.url;
       if (!link) continue;
       results.push({
         link,
-        title: result.title ?? "",
+        title: result.title ?? result.name ?? "",
         snippet: result.description ?? result.snippet ?? "",
       });
       if (results.length >= count) break;
