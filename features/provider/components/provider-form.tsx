@@ -56,15 +56,15 @@ type DefaultsShape = {
   extra: z.ZodType;
 } & z.ZodRawShape;
 
-const DEFAULT_OMIT: { name: true; apiKey: true; type: true; baseUrl: true } = {
-  name: true,
-  apiKey: true,
-  type: true,
-  baseUrl: true,
-};
-
 function getSchemaDefaults<T extends z.ZodObject<DefaultsShape>>(schema: T) {
-  const defaults = schema.omit(DEFAULT_OMIT).parse({ extra: {} });
+  const defaults = schema
+    .omit({
+      name: true,
+      apiKey: true,
+      type: true,
+      baseUrl: true,
+    })
+    .parse({ extra: {} });
   const baseUrl = schema.shape.baseUrl.safeParse(undefined);
   return baseUrl.success ? { ...defaults, baseUrl: baseUrl.data } : defaults;
 }
