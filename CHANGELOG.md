@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/sparelay/sparelay/compare/0.1.0...0.2.0) (2026-11-09)
+
+
+### Features
+
+* **provider:** add Bright Data SERP API provider ([#12](https://github.com/sparelay/sparelay/issues/12)) ([a3b99f7](https://github.com/sparelay/sparelay/commit/a3b99f79a1c62907deb5a6e446593a79ff9edd70))
+
 ## [0.1.0](https://github.com/sparelay/sparelay/compare/0.0.1...0.1.0) (2026-11-07)
 
 
