@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LogFilterCard } from "@/features/logs/components/log-filters";
+import { LogFilters } from "@/features/logs/components/log-filters";
 import { LogPagination } from "@/features/logs/components/log-pagination";
 import { LogTable } from "@/features/logs/components/log-table";
 import { filterSchema } from "@/features/logs/model/filters";
@@ -55,7 +55,7 @@ export default async function LogsPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <PageTitle>Logs</PageTitle>
-      <LogFilterCard filters={filters} isFiltered={isFiltered} />
+      <LogFilters filters={filters} isFiltered={isFiltered} />
       <Card>
         <CardContent className="overflow-x-auto">
           {data.totalCount === 0 ? (
