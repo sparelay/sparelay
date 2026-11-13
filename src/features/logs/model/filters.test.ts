@@ -26,4 +26,13 @@ describe("parseLogFilters", () => {
   it("treats a blank query as undefined", () => {
     expect(parseLogFilters({ q: "   " }).q).toBeUndefined();
   });
+
+  it("returns no filters without throwing for missing or invalid params", () => {
+    expect(parseLogFilters({})).toEqual({ q: undefined, provider: undefined, status: undefined });
+    expect(parseLogFilters({ q: 123 as unknown as string })).toEqual({
+      q: undefined,
+      provider: undefined,
+      status: undefined,
+    });
+  });
 });
