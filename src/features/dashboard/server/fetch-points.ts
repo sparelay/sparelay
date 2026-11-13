@@ -10,7 +10,12 @@ import type { Point } from "../model/types";
 export function fetchPoints(hours: number): { points: Point[]; capped: boolean } {
   const MAX_POINTS = 20000;
   const rows = getDb()
-    .select({ t: searchLogsTable.createdAt, d: searchLogsTable.durationMs })
+    .select({
+      t: searchLogsTable.createdAt,
+      d: searchLogsTable.durationMs,
+      success: searchLogsTable.success,
+      provider: searchLogsTable.providerName,
+    })
     .from(searchLogsTable)
     .where(
       and(

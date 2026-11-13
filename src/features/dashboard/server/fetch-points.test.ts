@@ -53,4 +53,36 @@ describe("fetchPoints", () => {
 
     expect(points.map((p) => p.d)).toEqual([30, 20, 10]);
   });
+
+  it("carries the success flag and provider name", () => {
+    const db = getDb();
+    db.delete(searchLogsTable).run();
+    db.insert(searchLogsTable)
+      .values([
+        {
+          id: "ok",
+          query: "q",
+          source: "api",
+          durationMs: 10,
+          success: true,
+          providerName: "Exa",
+          createdAt: sqliteTime(1),
+        },
+        {
+          id: "fail",
+          query: "q",
+          source: "api",
+          durationMs: 20,
+          success: false,
+          providerName: null,
+          createdAt: sqliteTime(2),
+        },
+      ])
+      .run();
+
+    const { points } = fetchPoints(1);
+
+    expect(points[0]).toMatchObject({ d: 20, success: false, provider: null });
+    expect(points[1]).toMatchObject({ d: 10, success: true, provider: "Exa" });
+  });
 });

@@ -14,4 +14,6 @@ export interface ProviderStat {
 export interface Point {
   t: string;
   d: number;
+  success: boolean;
+  provider: string | null;
 }
