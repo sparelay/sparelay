@@ -62,7 +62,13 @@ export function SiteHeader() {
             <Sun className="hidden h-4 w-4 dark:block" />
             <Moon className="h-4 w-4 dark:hidden" />
           </Button>
-          <Button variant="ghost" size="icon" aria-label="Logout" onClick={logout}>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Logout"
+            className="hidden text-destructive md:inline-flex"
+            onClick={logout}
+          >
             <LogOut className="h-4 w-4" />
           </Button>
 
@@ -108,6 +114,19 @@ export function SiteHeader() {
                 {n.label}
               </Link>
             ))}
+            <div className="my-2 border-t" />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="justify-start text-destructive"
+              onClick={() => {
+                setOpen(false);
+                logout();
+              }}
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
           </nav>
         </div>
       )}
