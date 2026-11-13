@@ -240,12 +240,14 @@ export function DashboardCharts({ range, tz }: Props) {
                 tickLine={{ stroke: "var(--border)" }}
               />
               <YAxis
+                width={30}
                 yAxisId="count"
                 tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 axisLine={{ stroke: "var(--border)" }}
                 tickLine={{ stroke: "var(--border)" }}
               />
               <YAxis
+                width={30}
                 yAxisId="ms"
                 orientation="right"
                 tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
@@ -311,6 +313,7 @@ export function DashboardCharts({ range, tz }: Props) {
                 tickLine={{ stroke: "var(--border)" }}
               />
               <YAxis
+                width={30}
                 tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 axisLine={{ stroke: "var(--border)" }}
                 tickLine={{ stroke: "var(--border)" }}
@@ -348,6 +351,7 @@ export function DashboardCharts({ range, tz }: Props) {
                 tickLine={{ stroke: "var(--border)" }}
               />
               <YAxis
+                width={30}
                 tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
                 axisLine={{ stroke: "var(--border)" }}
                 tickLine={{ stroke: "var(--border)" }}
