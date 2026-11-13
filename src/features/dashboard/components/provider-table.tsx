@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { toProviderType } from "@/features/provider/lib/to-provider-type";
 import { Badge } from "@/shared/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Switch } from "@/shared/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -27,6 +28,7 @@ interface Props {
 
 export function ProviderTable({ range, tz }: Props) {
   const [providers, setProviders] = useState<ProviderStat[]>([]);
+  const [showUnused, setShowUnused] = useState(false);
 
   useEffect(() => {
     getProviderStats(range).then((p) => {
@@ -37,56 +39,102 @@ export function ProviderTable({ range, tz }: Props) {
     });
   }, [range]);
 
+  const used = providers.filter((p) => p.calls >= 1);
+  const shown = showUnused ? providers : used;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>By provider</CardTitle>
+        <CardAction>
+          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Switch
+              checked={showUnused}
+              onCheckedChange={setShowUnused}
+              aria-label="Show unused providers"
+            />
+            Show unused
+          </label>
+        </CardAction>
       </CardHeader>
       <CardContent className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Calls</TableHead>
-              <TableHead className="text-right">Success</TableHead>
-              <TableHead className="text-right">Rate</TableHead>
-              <TableHead className="text-right">Avg</TableHead>
-              <TableHead>Last used</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {providers.map((p) => (
-              <TableRow key={p.id}>
-                <TableCell className="font-medium">
+        <div className="flex flex-col gap-2 sm:hidden">
+          {shown.map((p) => (
+            <div key={p.id} className="rounded-lg border p-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium">
                   {p.name}
                   {!p.enabled && (
                     <Badge variant="secondary" className="ml-2">
                       Disabled
                     </Badge>
                   )}
-                </TableCell>
-                <TableCell>
-                  <ProviderTag type={toProviderType(p.type)} />
-                </TableCell>
-                <TableCell className="text-right">{p.calls}</TableCell>
-                <TableCell className="text-right">{p.success}</TableCell>
-                <TableCell className="text-right">{p.successRate}%</TableCell>
-                <TableCell className="text-right">{p.avgMs}ms</TableCell>
-                <TableCell className="text-sm text-muted-foreground">
-                  {p.lastUsed ? fmtTime(p.lastUsed, tz) : "-"}
-                </TableCell>
-              </TableRow>
-            ))}
-            {providers.length === 0 && (
+                </span>
+                <ProviderTag type={toProviderType(p.type)} />
+              </div>
+              <div className="mt-2 flex items-center justify-between gap-2">
+                <span className="text-xs text-muted-foreground">
+                  {`${p.calls} calls · ${p.success} success · ${p.successRate}%`}
+                </span>
+                <span className="text-xs text-muted-foreground">{p.avgMs}ms</span>
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">
+                {`Last used ${p.lastUsed ? fmtTime(p.lastUsed, tz) : "-"}`}
+              </div>
+            </div>
+          ))}
+          {shown.length === 0 && (
+            <div className="py-6 text-center text-sm text-muted-foreground">
+              {providers.length === 0 ? "No providers registered" : "No calls in this range"}
+            </div>
+          )}
+        </div>
+        <div className="hidden sm:block">
+          <Table>
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
-                  No providers registered
-                </TableCell>
+                <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead className="text-right">Calls</TableHead>
+                <TableHead className="text-right">Success</TableHead>
+                <TableHead className="text-right">Rate</TableHead>
+                <TableHead className="text-right">Avg</TableHead>
+                <TableHead>Last used</TableHead>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {shown.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell className="font-medium">
+                    {p.name}
+                    {!p.enabled && (
+                      <Badge variant="secondary" className="ml-2">
+                        Disabled
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <ProviderTag type={toProviderType(p.type)} />
+                  </TableCell>
+                  <TableCell className="text-right">{p.calls}</TableCell>
+                  <TableCell className="text-right">{p.success}</TableCell>
+                  <TableCell className="text-right">{p.successRate}%</TableCell>
+                  <TableCell className="text-right">{p.avgMs}ms</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {p.lastUsed ? fmtTime(p.lastUsed, tz) : "-"}
+                  </TableCell>
+                </TableRow>
+              ))}
+              {shown.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center text-muted-foreground">
+                    {providers.length === 0 ? "No providers registered" : "No calls in this range"}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );
