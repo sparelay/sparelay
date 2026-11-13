@@ -9,6 +9,7 @@ import type { LogFilters } from "@/features/logs/model/filters";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { PROVIDER_REGISTRY, type ProviderType } from "@/features/provider/model/provider";
 import { Button } from "@/shared/components/ui/button";
+import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import {
   Select,
@@ -61,47 +62,60 @@ export function LogFilterBar({ filters }: Props) {
       action="/logs"
       method="get"
       onSubmit={handleSubmit}
-      className="flex flex-wrap items-center gap-2"
+      className="flex flex-wrap items-end gap-2"
     >
-      <Input
-        name="q"
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search query"
-        className="w-full sm:w-64"
-        type="search"
-      />
-      <Select
-        items={providerItems}
-        value={provider}
-        onValueChange={(value) => setProvider(value ?? "")}
-      >
-        <SelectTrigger className="w-40">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="">All providers</SelectItem>
-          {Object.entries(PROVIDER_REGISTRY).map(([type]) => (
-            <SelectItem key={type} value={type}>
-              <ProviderTag type={type as ProviderType} />
+      <Field className="w-full sm:w-64">
+        <FieldLabel htmlFor="logs-filter-query">Query</FieldLabel>
+        <Input
+          id="logs-filter-query"
+          name="q"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Search query"
+          type="search"
+        />
+      </Field>
+      <Field className="w-40">
+        <FieldLabel htmlFor="logs-filter-provider">Provider</FieldLabel>
+        <Select
+          items={providerItems}
+          value={provider}
+          onValueChange={(value) => setProvider(value ?? "")}
+        >
+          <SelectTrigger id="logs-filter-provider">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All providers</SelectItem>
+            {Object.entries(PROVIDER_REGISTRY).map(([type]) => (
+              <SelectItem key={type} value={type}>
+                <ProviderTag type={type as ProviderType} />
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </Field>
+      <Field className="w-32">
+        <FieldLabel htmlFor="logs-filter-status">Status</FieldLabel>
+        <Select
+          items={statusItems}
+          value={status}
+          onValueChange={(value) => setStatus(value ?? "")}
+        >
+          <SelectTrigger id="logs-filter-status">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All status</SelectItem>
+            <SelectItem value="ok">
+              <OkBadge />
             </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select items={statusItems} value={status} onValueChange={(value) => setStatus(value ?? "")}>
-        <SelectTrigger className="w-32">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="">All status</SelectItem>
-          <SelectItem value="ok">
-            <OkBadge />
-          </SelectItem>
-          <SelectItem value="fail">
-            <FailBadge />
-          </SelectItem>
-        </SelectContent>
-      </Select>
+            <SelectItem value="fail">
+              <FailBadge />
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </Field>
       <Button type="submit" disabled={isPending}>
         Filter
       </Button>
