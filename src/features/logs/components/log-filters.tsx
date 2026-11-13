@@ -38,7 +38,9 @@ export function LogFilters({ filters }: Props) {
   const [status, setStatus] = useState(filters.status ?? "");
   const [range, setRange] = useState(filters.range ?? "");
   const [isPending, startTransition] = useTransition();
-  const isFiltered = Boolean(filters.q || filters.provider || filters.status || filters.range);
+  const [open, setOpen] = useState(
+    Boolean(filters.q || filters.provider || filters.status || filters.range),
+  );
 
   const providerItems: Record<string, ReactNode> = {
     "": "All providers",
@@ -82,7 +84,10 @@ export function LogFilters({ filters }: Props) {
   return (
     <Card>
       <CardContent>
-        <Accordion defaultValue={isFiltered ? ["filters"] : []}>
+        <Accordion
+          value={open ? ["filters"] : []}
+          onValueChange={(next) => setOpen(Array.isArray(next) && next.includes("filters"))}
+        >
           <AccordionItem value="filters" className="border-b-0">
             <AccordionTrigger className="p-0">Filters</AccordionTrigger>
             <AccordionContent className="mt-4">
