@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { toProviderType } from "@/features/provider/lib/to-provider-type";
 import { Badge } from "@/shared/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import { Switch } from "@/shared/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -27,6 +28,7 @@ interface Props {
 
 export function ProviderTable({ range, tz }: Props) {
   const [providers, setProviders] = useState<ProviderStat[]>([]);
+  const [showUnused, setShowUnused] = useState(false);
 
   useEffect(() => {
     getProviderStats(range).then((p) => {
@@ -38,11 +40,22 @@ export function ProviderTable({ range, tz }: Props) {
   }, [range]);
 
   const used = providers.filter((p) => p.calls >= 1);
+  const shown = showUnused ? providers : used;
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>By provider</CardTitle>
+        <CardAction>
+          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Switch
+              checked={showUnused}
+              onCheckedChange={setShowUnused}
+              aria-label="Show unused providers"
+            />
+            Show unused
+          </label>
+        </CardAction>
       </CardHeader>
       <CardContent className="overflow-x-auto">
         <Table>
@@ -58,7 +71,7 @@ export function ProviderTable({ range, tz }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {used.map((p) => (
+            {shown.map((p) => (
               <TableRow key={p.id}>
                 <TableCell className="font-medium">
                   {p.name}
@@ -80,19 +93,13 @@ export function ProviderTable({ range, tz }: Props) {
                 </TableCell>
               </TableRow>
             ))}
-            {providers.length === 0 ? (
+            {shown.length === 0 && (
               <TableRow>
                 <TableCell colSpan={7} className="text-center text-muted-foreground">
-                  No providers registered
+                  {providers.length === 0 ? "No providers registered" : "No calls in this range"}
                 </TableCell>
               </TableRow>
-            ) : used.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
-                  No calls in this range
-                </TableCell>
-              </TableRow>
-            ) : null}
+            )}
           </TableBody>
         </Table>
       </CardContent>
