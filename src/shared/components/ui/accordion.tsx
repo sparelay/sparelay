@@ -47,7 +47,7 @@ function AccordionContent({ className, children, ...props }: AccordionPrimitive.
       className={cn("overflow-hidden data-open:animate-in data-open:fade-in-0", className)}
       {...props}
     >
-      <div className={cn("mt-2", className)}>{children}</div>
+      <div className={cn("mt-4", className)}>{children}</div>
     </AccordionPrimitive.Panel>
   );
 }
