@@ -3,6 +3,7 @@ import { and, count, desc, eq, sql, type SQL } from "drizzle-orm";
 
 import { getDb } from "@/shared/db/client";
 import { searchLogsTable } from "@/shared/db/schemas";
+import { rangeHours, sinceModifier } from "@/shared/lib/ranges";
 
 import type { LogFilters } from "../model/filters";
 import type { LogPage } from "../model/types";
@@ -18,6 +19,10 @@ function filterCondition(filters: LogFilters): SQL | undefined {
   }
   if (filters.status) {
     conditions.push(eq(searchLogsTable.success, filters.status === "ok"));
+  }
+  if (filters.range) {
+    const { hours } = rangeHours(filters.range);
+    conditions.push(sql`${searchLogsTable.createdAt} >= datetime('now', ${sinceModifier(hours)})`);
   }
   if (conditions.length === 0) {
     return undefined;

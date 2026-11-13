@@ -3,8 +3,8 @@ import { and, asc, avg, count, max, sql } from "drizzle-orm";
 
 import { getDb } from "@/shared/db/client";
 import { providersTable, searchLogsTable } from "@/shared/db/schemas";
+import { sinceModifier } from "@/shared/lib/ranges";
 
-import { sinceModifier } from "../lib/ranges";
 import type { ProviderStat } from "../model/types";
 
 export function fetchProviderStats(hours: number): ProviderStat[] {

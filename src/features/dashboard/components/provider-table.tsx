@@ -16,9 +16,9 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { fmtTime } from "@/shared/lib/format-date-time";
+import type { Range } from "@/shared/lib/ranges";
 
 import { getProviderStats } from "../actions/get-provider-stats";
-import type { Range } from "../model/types";
 import type { ProviderStat } from "../model/types";
 
 interface Props {

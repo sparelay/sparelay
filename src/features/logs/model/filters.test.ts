@@ -31,6 +31,10 @@ describe("filterSchema", () => {
     expect(filterSchema.parse({ q: "   " }).q).toBeUndefined();
   });
 
+  it("treats an unknown range as undefined", () => {
+    expect(filterSchema.parse({ range: "5d" }).range).toBeUndefined();
+  });
+
   it("treats non-string values as undefined", () => {
     expect(filterSchema.parse({ q: ["a", "b"], provider: ["exa"] })).toEqual({
       q: undefined,
@@ -44,6 +48,7 @@ describe("filterSchema", () => {
       q: undefined,
       provider: undefined,
       status: undefined,
+      range: undefined,
     });
   });
 });

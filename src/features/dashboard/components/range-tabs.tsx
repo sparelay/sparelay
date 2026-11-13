@@ -1,8 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/shared/components/ui/tabs";
-
-import { RANGES, type Range } from "../model/types";
+import { RANGES, type Range } from "@/shared/lib/ranges";
 
 interface Props {
   range: Range;

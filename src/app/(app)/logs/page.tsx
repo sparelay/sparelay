@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LogFilterBar } from "@/features/logs/components/log-filters";
+import { LogFilters } from "@/features/logs/components/log-filters";
 import { LogPagination } from "@/features/logs/components/log-pagination";
 import { LogTable } from "@/features/logs/components/log-table";
 import { filterSchema } from "@/features/logs/model/filters";
@@ -17,7 +17,13 @@ export const metadata: Metadata = {
 const PAGE_SIZE = 50;
 
 type Props = {
-  searchParams: Promise<{ page?: string; q?: string; provider?: string; status?: string }>;
+  searchParams: Promise<{
+    page?: string;
+    q?: string;
+    provider?: string;
+    status?: string;
+    range?: string;
+  }>;
 };
 
 export default async function LogsPage({ searchParams }: Props) {
@@ -31,6 +37,7 @@ export default async function LogsPage({ searchParams }: Props) {
     if (filters.q) redirectParams.set("q", filters.q);
     if (filters.provider) redirectParams.set("provider", filters.provider);
     if (filters.status) redirectParams.set("status", filters.status);
+    if (filters.range) redirectParams.set("range", filters.range);
     redirectParams.set("page", String(data.page.current));
     redirect(`/logs?${redirectParams.toString()}`);
   }
@@ -39,7 +46,8 @@ export default async function LogsPage({ searchParams }: Props) {
   if (filters.q) filterParams.set("q", filters.q);
   if (filters.provider) filterParams.set("provider", filters.provider);
   if (filters.status) filterParams.set("status", filters.status);
-  const isFiltered = Boolean(filters.q || filters.provider || filters.status);
+  if (filters.range) filterParams.set("range", filters.range);
+  const isFiltered = Boolean(filters.q || filters.provider || filters.status || filters.range);
   const rangeStart = (data.page.current - 1) * data.page.size + 1;
   const rangeEnd = Math.min(data.page.current * data.page.size, data.totalCount);
   const tz = fetchTimezone();
@@ -47,11 +55,9 @@ export default async function LogsPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <PageTitle>Logs</PageTitle>
+      <LogFilters filters={filters} />
       <Card>
         <CardContent className="overflow-x-auto">
-          <div className="py-3">
-            <LogFilterBar filters={filters} />
-          </div>
           {data.totalCount === 0 ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
               {isFiltered ? "No matching logs" : "No history"}

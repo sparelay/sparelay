@@ -14,11 +14,11 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+import type { Range } from "@/shared/lib/ranges";
+import { rangeHours } from "@/shared/lib/ranges";
 
 import { getPoints } from "../actions/get-points";
-import { rangeHours } from "../lib/ranges";
 import type { Point } from "../model/types";
-import type { Range } from "../model/types";
 
 const BUCKET_MINUTES: Record<string, number> = {
   "1h": 1,

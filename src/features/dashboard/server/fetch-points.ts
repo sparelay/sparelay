@@ -3,8 +3,8 @@ import { and, asc, sql } from "drizzle-orm";
 
 import { getDb } from "@/shared/db/client";
 import { searchLogsTable } from "@/shared/db/schemas";
+import { sinceModifier } from "@/shared/lib/ranges";
 
-import { sinceModifier } from "../lib/ranges";
 import type { Point } from "../model/types";
 
 export function fetchPoints(hours: number): { points: Point[]; capped: boolean } {

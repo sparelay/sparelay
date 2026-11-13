@@ -14,6 +14,7 @@ export default function LogsLoading() {
             <Skeleton className="h-8 w-64" />
             <Skeleton className="h-8 w-40" />
             <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-8 w-40" />
             <Skeleton className="h-8 w-20" />
           </div>
           <div className="flex flex-col gap-3">

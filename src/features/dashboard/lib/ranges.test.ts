@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { percentile, rangeHours, sinceModifier } from "./ranges";
+import { rangeHours, sinceModifier } from "@/shared/lib/ranges";
+
+import { percentile } from "./ranges";
 
 describe("rangeHours", () => {
   it("maps every range to its hour count", () => {

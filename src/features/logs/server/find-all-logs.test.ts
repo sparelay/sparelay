@@ -168,4 +168,63 @@ describe("findAllLogs filters", () => {
 
     expect(page.current).toBe(2);
   });
+
+  it("filters by recent period", () => {
+    const db = getDb();
+    const now = new Date();
+    const toSqlite = (msAgo: number) => {
+      const d = new Date(now.getTime() - msAgo);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`;
+    };
+    db.delete(searchLogsTable).run();
+    db.insert(searchLogsTable)
+      .values([
+        { ...base, id: "recent", createdAt: toSqlite(10 * 60 * 1000) },
+        { ...base, id: "two-days", createdAt: toSqlite(2 * 24 * 60 * 60 * 1000) },
+        { ...base, id: "ancient", createdAt: toSqlite(60 * 24 * 60 * 60 * 1000) },
+      ])
+      .run();
+
+    const day = findAllLogs(10, 1, { range: "1d" });
+    const week = findAllLogs(10, 1, { range: "7d" });
+    const all = findAllLogs(10, 1);
+
+    expect(day.rows.map((r) => r.id)).toEqual(["recent"]);
+    expect(week.rows.map((r) => r.id)).toEqual(["recent", "two-days"]);
+    expect(all.rows.map((r) => r.id)).toEqual(["recent", "two-days", "ancient"]);
+    expect(day.totalCount).toBe(1);
+  });
+
+  it("combines the period with other filters", () => {
+    const db = getDb();
+    const recent = new Date(Date.now() - 10 * 60 * 1000);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const recentSqlite = `${recent.getUTCFullYear()}-${pad(recent.getUTCMonth() + 1)}-${pad(recent.getUTCDate())} ${pad(recent.getUTCHours())}:${pad(recent.getUTCMinutes())}:${pad(recent.getUTCSeconds())}`;
+    db.delete(searchLogsTable).run();
+    db.insert(searchLogsTable)
+      .values([
+        {
+          ...base,
+          id: "exa-ok",
+          query: "alpha",
+          providerType: "exa",
+          success: true,
+          createdAt: recentSqlite,
+        },
+        {
+          ...base,
+          id: "exa-fail",
+          query: "alpha",
+          providerType: "exa",
+          success: false,
+          createdAt: recentSqlite,
+        },
+      ])
+      .run();
+
+    const { rows } = findAllLogs(10, 1, { provider: "exa", status: "fail", range: "1d" });
+
+    expect(rows.map((r) => r.id)).toEqual(["exa-fail"]);
+  });
 });
