@@ -65,7 +65,7 @@ export default async function LogsPage({ searchParams }: Props) {
         <CardContent>
           <Accordion defaultValue={isFiltered ? ["filters"] : []}>
             <AccordionItem value="filters" className="border-b-0">
-              <AccordionTrigger className="py-3">Filters</AccordionTrigger>
+              <AccordionTrigger>Filters</AccordionTrigger>
               <AccordionContent>
                 <LogFilterBar filters={filters} />
               </AccordionContent>

@@ -76,9 +76,9 @@ export function LogFilterBar({ filters }: Props) {
       action="/logs"
       method="get"
       onSubmit={handleSubmit}
-      className="flex flex-wrap items-end gap-2"
+      className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-end"
     >
-      <Field className="w-full sm:w-64">
+      <Field className="col-span-2 sm:w-64">
         <FieldLabel htmlFor="logs-filter-query">Query</FieldLabel>
         <Input
           id="logs-filter-query"
@@ -89,14 +89,14 @@ export function LogFilterBar({ filters }: Props) {
           type="search"
         />
       </Field>
-      <Field className="w-40">
+      <Field className="sm:w-40">
         <FieldLabel htmlFor="logs-filter-provider">Provider</FieldLabel>
         <Select
           items={providerItems}
           value={provider}
           onValueChange={(value) => setProvider(value ?? "")}
         >
-          <SelectTrigger id="logs-filter-provider">
+          <SelectTrigger id="logs-filter-provider" className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -109,14 +109,14 @@ export function LogFilterBar({ filters }: Props) {
           </SelectContent>
         </Select>
       </Field>
-      <Field className="w-32">
+      <Field className="sm:w-32">
         <FieldLabel htmlFor="logs-filter-status">Status</FieldLabel>
         <Select
           items={statusItems}
           value={status}
           onValueChange={(value) => setStatus(value ?? "")}
         >
-          <SelectTrigger id="logs-filter-status">
+          <SelectTrigger id="logs-filter-status" className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -130,10 +130,10 @@ export function LogFilterBar({ filters }: Props) {
           </SelectContent>
         </Select>
       </Field>
-      <Field className="w-40">
+      <Field className="sm:w-40">
         <FieldLabel htmlFor="logs-filter-range">Period</FieldLabel>
         <Select items={rangeItems} value={range} onValueChange={(value) => setRange(value ?? "")}>
-          <SelectTrigger id="logs-filter-range">
+          <SelectTrigger id="logs-filter-range" className="w-full">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -146,14 +146,16 @@ export function LogFilterBar({ filters }: Props) {
           </SelectContent>
         </Select>
       </Field>
-      <Button type="submit" disabled={isPending}>
-        Filter
-      </Button>
-      {(filters.q || filters.provider || filters.status || filters.range) && (
-        <a href="/logs" className={buttonVariants({ variant: "ghost" })}>
-          Clear
-        </a>
-      )}
+      <div className="col-span-2 flex items-end justify-end gap-2 sm:contents">
+        <Button type="submit" disabled={isPending}>
+          Filter
+        </Button>
+        {(filters.q || filters.provider || filters.status || filters.range) && (
+          <a href="/logs" className={buttonVariants({ variant: "ghost" })}>
+            Clear
+          </a>
+        )}
+      </div>
     </form>
   );
 }
