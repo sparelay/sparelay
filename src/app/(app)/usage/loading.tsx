@@ -1,10 +1,13 @@
-import { PageSkeleton } from "@/shared/components/page-skeleton";
+import { PageTitle } from "@/shared/components/page-title";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export default function UsageLoading() {
   return (
-    <PageSkeleton titleWidth="w-20">
+    <div className="flex flex-col gap-4">
+      <PageTitle>
+        <Skeleton className="h-7 w-20" />
+      </PageTitle>
       <Card>
         <CardContent className="flex flex-col gap-3 py-3">
           <Skeleton className="h-5 w-32" />
@@ -14,6 +17,6 @@ export default function UsageLoading() {
           <Skeleton className="h-32 w-full" />
         </CardContent>
       </Card>
-    </PageSkeleton>
+    </div>
   );
 }

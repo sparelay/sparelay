@@ -1,10 +1,13 @@
-import { PageSkeleton } from "@/shared/components/page-skeleton";
+import { PageTitle } from "@/shared/components/page-title";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export default function NewProviderLoading() {
   return (
-    <PageSkeleton titleWidth="w-40" className="gap-6">
+    <div className="flex flex-col gap-6">
+      <PageTitle>
+        <Skeleton className="h-7 w-40" />
+      </PageTitle>
       <Card>
         <CardContent className="flex flex-col gap-3">
           {Array.from({ length: 4 }, (_, i) => (
@@ -16,6 +19,6 @@ export default function NewProviderLoading() {
           <Skeleton className="h-8 w-24 self-end" />
         </CardContent>
       </Card>
-    </PageSkeleton>
+    </div>
   );
 }

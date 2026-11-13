@@ -1,10 +1,13 @@
-import { PageSkeleton } from "@/shared/components/page-skeleton";
+import { PageTitle } from "@/shared/components/page-title";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export default function LogsLoading() {
   return (
-    <PageSkeleton titleWidth="w-14">
+    <div className="flex flex-col gap-4">
+      <PageTitle>
+        <Skeleton className="h-7 w-14" />
+      </PageTitle>
       <Card>
         <CardContent>
           <div className="flex flex-wrap items-center gap-2 py-3">
@@ -21,6 +24,6 @@ export default function LogsLoading() {
           </div>
         </CardContent>
       </Card>
-    </PageSkeleton>
+    </div>
   );
 }
