@@ -1,15 +1,35 @@
 import "server-only";
-import { count, desc } from "drizzle-orm";
+import { and, count, desc, eq, sql, type SQL } from "drizzle-orm";
 
 import { getDb } from "@/shared/db/client";
 import { searchLogsTable } from "@/shared/db/schemas";
 
+import type { LogFilters } from "../model/filters";
 import type { LogPage } from "../model/types";
 
-export function findAllLogs(limit: number, page: number): LogPage {
+function filterCondition(filters: LogFilters): SQL | undefined {
+  const conditions: SQL[] = [];
+  if (filters.q) {
+    const pattern = `%${filters.q.replace(/[\\%_]/g, "\\$&")}%`;
+    conditions.push(sql`${searchLogsTable.query} LIKE ${pattern} ESCAPE ${"\\"}`);
+  }
+  if (filters.provider) {
+    conditions.push(eq(searchLogsTable.providerType, filters.provider));
+  }
+  if (filters.status) {
+    conditions.push(eq(searchLogsTable.success, filters.status === "ok"));
+  }
+  if (conditions.length === 0) {
+    return undefined;
+  }
+  return and(...conditions);
+}
+
+export function findAllLogs(limit: number, page: number, filters: LogFilters = {}): LogPage {
   const db = getDb();
   const size = Math.max(1, Math.floor(limit));
-  const totalCount = db.select({ c: count() }).from(searchLogsTable).get()?.c ?? 0;
+  const where = filterCondition(filters);
+  const totalCount = db.select({ c: count() }).from(searchLogsTable).where(where).get()?.c ?? 0;
   const totalPages = Math.max(1, Math.ceil(totalCount / size));
   const current = Math.min(Math.max(1, Math.floor(page)), totalPages);
   const rows = db
@@ -26,6 +46,7 @@ export function findAllLogs(limit: number, page: number): LogPage {
       createdAt: searchLogsTable.createdAt,
     })
     .from(searchLogsTable)
+    .where(where)
     .orderBy(desc(searchLogsTable.createdAt), desc(searchLogsTable.id))
     .limit(size)
     .offset((current - 1) * size)

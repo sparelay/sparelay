@@ -11,6 +11,7 @@ import {
 interface Props {
   page: number;
   totalPages: number;
+  params?: string;
 }
 
 function pageItems(page: number, totalPages: number): (number | "ellipsis")[] {
@@ -27,16 +28,17 @@ function pageItems(page: number, totalPages: number): (number | "ellipsis")[] {
   return items;
 }
 
-export function LogPagination({ page, totalPages }: Props) {
+export function LogPagination({ page, totalPages, params = "" }: Props) {
   const atFirst = page <= 1;
   const atLast = page >= totalPages;
+  const href = (p: number) => (params ? `/logs?${params}&page=${p}` : `/logs?page=${p}`);
 
   return (
     <Pagination className="mx-0 w-auto">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href={atFirst ? undefined : `/logs?page=${page - 1}`}
+            href={atFirst ? undefined : href(page - 1)}
             aria-disabled={atFirst}
             className={atFirst ? "pointer-events-none opacity-50" : undefined}
           />
@@ -48,7 +50,7 @@ export function LogPagination({ page, totalPages }: Props) {
             </PaginationItem>
           ) : (
             <PaginationItem key={item}>
-              <PaginationLink href={`/logs?page=${item}`} isActive={item === page}>
+              <PaginationLink href={href(item)} isActive={item === page}>
                 {item}
               </PaginationLink>
             </PaginationItem>
@@ -56,7 +58,7 @@ export function LogPagination({ page, totalPages }: Props) {
         )}
         <PaginationItem>
           <PaginationNext
-            href={atLast ? undefined : `/logs?page=${page + 1}`}
+            href={atLast ? undefined : href(page + 1)}
             aria-disabled={atLast}
             className={atLast ? "pointer-events-none opacity-50" : undefined}
           />
