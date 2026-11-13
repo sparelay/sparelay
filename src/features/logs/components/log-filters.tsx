@@ -8,7 +8,7 @@ import { OkBadge } from "@/features/logs/components/ok-badge";
 import type { LogFilters } from "@/features/logs/model/filters";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { PROVIDER_REGISTRY, type ProviderType } from "@/features/provider/model/provider";
-import { Button } from "@/shared/components/ui/button";
+import { Button, buttonVariants } from "@/shared/components/ui/button";
 import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -150,7 +150,9 @@ export function LogFilterBar({ filters }: Props) {
         Filter
       </Button>
       {(filters.q || filters.provider || filters.status || filters.range) && (
-        <Button variant="ghost" nativeButton={false} render={<a href="/logs">Clear</a>} />
+        <a href="/logs" className={buttonVariants({ variant: "ghost" })}>
+          Clear
+        </a>
       )}
     </form>
   );
