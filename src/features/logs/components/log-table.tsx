@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
+import { FailBadge } from "@/features/logs/components/fail-badge";
+import { OkBadge } from "@/features/logs/components/ok-badge";
 import { type LogRow } from "@/features/logs/model/types";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { toProviderType } from "@/features/provider/lib/to-provider-type";
-import { Badge } from "@/shared/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -65,13 +66,7 @@ export function LogTable({ rows, tz }: Props) {
             <TableCell className="text-right">{r.attempts}</TableCell>
             <TableCell className="text-right">{r.resultsCount}</TableCell>
             <TableCell className="text-right">{r.durationMs}ms</TableCell>
-            <TableCell>
-              {r.success ? (
-                <Badge className="bg-green-600 text-white dark:bg-green-700">OK</Badge>
-              ) : (
-                <Badge className="bg-red-600 text-white dark:bg-red-700">FAIL</Badge>
-              )}
-            </TableCell>
+            <TableCell>{r.success ? <OkBadge /> : <FailBadge />}</TableCell>
           </TableRow>
         ))}
       </TableBody>

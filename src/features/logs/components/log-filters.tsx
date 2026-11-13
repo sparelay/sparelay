@@ -1,10 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent, type ReactNode } from "react";
 
+import { FailBadge } from "@/features/logs/components/fail-badge";
+import { OkBadge } from "@/features/logs/components/ok-badge";
 import type { LogFilters } from "@/features/logs/model/filters";
-import { PROVIDER_REGISTRY } from "@/features/provider/model/provider";
+import { ProviderTag } from "@/features/provider/components/provider-tag";
+import { PROVIDER_REGISTRY, type ProviderType } from "@/features/provider/model/provider";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -26,16 +29,19 @@ export function LogFilterBar({ filters }: Props) {
   const [status, setStatus] = useState(filters.status ?? "");
   const [isPending, startTransition] = useTransition();
 
-  const providerItems: Record<string, string> = {
+  const providerItems: Record<string, ReactNode> = {
     "": "All providers",
     ...Object.fromEntries(
-      Object.entries(PROVIDER_REGISTRY).map(([type, entry]) => [type, entry.label]),
+      Object.entries(PROVIDER_REGISTRY).map(([type]) => [
+        type,
+        <ProviderTag key={type} type={type as ProviderType} />,
+      ]),
     ),
   };
-  const statusItems: Record<string, string> = {
+  const statusItems: Record<string, ReactNode> = {
     "": "All status",
-    ok: "OK",
-    fail: "FAIL",
+    ok: <OkBadge />,
+    fail: <FailBadge />,
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -75,9 +81,9 @@ export function LogFilterBar({ filters }: Props) {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="">All providers</SelectItem>
-          {Object.entries(PROVIDER_REGISTRY).map(([type, entry]) => (
+          {Object.entries(PROVIDER_REGISTRY).map(([type]) => (
             <SelectItem key={type} value={type}>
-              {entry.label}
+              <ProviderTag type={type as ProviderType} />
             </SelectItem>
           ))}
         </SelectContent>
@@ -88,8 +94,12 @@ export function LogFilterBar({ filters }: Props) {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="">All status</SelectItem>
-          <SelectItem value="ok">OK</SelectItem>
-          <SelectItem value="fail">FAIL</SelectItem>
+          <SelectItem value="ok">
+            <OkBadge />
+          </SelectItem>
+          <SelectItem value="fail">
+            <FailBadge />
+          </SelectItem>
         </SelectContent>
       </Select>
       <Button type="submit" disabled={isPending}>

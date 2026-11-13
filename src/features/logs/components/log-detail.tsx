@@ -1,8 +1,9 @@
 "use client";
 
+import { FailBadge } from "@/features/logs/components/fail-badge";
+import { OkBadge } from "@/features/logs/components/ok-badge";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { toProviderType } from "@/features/provider/lib/to-provider-type";
-import { Badge } from "@/shared/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { fmtTime } from "@/shared/lib/format-date-time";
 
@@ -49,14 +50,7 @@ export function LogDetail({ log, tz }: Props) {
     ["Attempts", String(log.attempts)],
     ["Results", String(log.resultsCount)],
     ["Duration", `${log.durationMs}ms`],
-    [
-      "Status",
-      log.success ? (
-        <Badge className="bg-green-600 text-white dark:bg-green-700">OK</Badge>
-      ) : (
-        <Badge className="bg-red-600 text-white dark:bg-red-700">FAIL</Badge>
-      ),
-    ],
+    ["Status", log.success ? <OkBadge /> : <FailBadge />],
   ];
 
   return (
