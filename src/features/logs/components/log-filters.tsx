@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type FormEvent, type ReactNode } from "react";
+import { useState, useTransition, type ReactNode, type SubmitEvent } from "react";
 
 import { FailBadge } from "@/features/logs/components/fail-badge";
 import { OkBadge } from "@/features/logs/components/ok-badge";
@@ -44,7 +44,7 @@ export function LogFilterBar({ filters }: Props) {
     fail: <FailBadge />,
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const params = new URLSearchParams();
     if (query.trim()) params.set("q", query.trim());
