@@ -38,9 +38,8 @@ export function LogFilters({ filters }: Props) {
   const [status, setStatus] = useState(filters.status ?? "");
   const [range, setRange] = useState(filters.range ?? "");
   const [isPending, startTransition] = useTransition();
-  const [open, setOpen] = useState(
-    Boolean(filters.q || filters.provider || filters.status || filters.range),
-  );
+  const isFiltered = Boolean(filters.q || filters.provider || filters.status || filters.range);
+  const [open, setOpen] = useState(isFiltered);
 
   const providerItems: Record<string, ReactNode> = {
     "": "All providers",
@@ -173,7 +172,7 @@ export function LogFilters({ filters }: Props) {
                   <Button type="submit" disabled={isPending}>
                     Filter
                   </Button>
-                  {(filters.q || filters.provider || filters.status || filters.range) && (
+                  {isFiltered && (
                     <a href="/logs" className={buttonVariants({ variant: "ghost" })}>
                       Clear
                     </a>
