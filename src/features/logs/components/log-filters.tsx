@@ -150,7 +150,7 @@ export function LogFilterBar({ filters }: Props) {
         Filter
       </Button>
       {(filters.q || filters.provider || filters.status || filters.range) && (
-        <Button variant="ghost" render={<a href="/logs">Clear</a>} />
+        <Button variant="ghost" nativeButton={false} render={<a href="/logs">Clear</a>} />
       )}
     </form>
   );
