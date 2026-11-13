@@ -28,6 +28,7 @@ export function LogFilterBar({ filters }: Props) {
   const [query, setQuery] = useState(filters.q ?? "");
   const [provider, setProvider] = useState(filters.provider ?? "");
   const [status, setStatus] = useState(filters.status ?? "");
+  const [range, setRange] = useState(filters.range ?? "");
   const [isPending, startTransition] = useTransition();
 
   const providerItems: Record<string, ReactNode> = {
@@ -44,6 +45,12 @@ export function LogFilterBar({ filters }: Props) {
     ok: <OkBadge />,
     fail: <FailBadge />,
   };
+  const rangeItems: Record<string, string> = {
+    "": "All time",
+    "1d": "Last 24 hours",
+    "7d": "Last 7 days",
+    "30d": "Last 30 days",
+  };
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,6 +58,7 @@ export function LogFilterBar({ filters }: Props) {
     if (query.trim()) params.set("q", query.trim());
     if (provider) params.set("provider", provider);
     if (status) params.set("status", status);
+    if (range) params.set("range", range);
     const search = params.toString();
     startTransition(() => {
       router.push(search ? `/logs?${search}` : "/logs");
@@ -116,10 +124,24 @@ export function LogFilterBar({ filters }: Props) {
           </SelectContent>
         </Select>
       </Field>
+      <Field className="w-40">
+        <FieldLabel htmlFor="logs-filter-range">Period</FieldLabel>
+        <Select items={rangeItems} value={range} onValueChange={(value) => setRange(value ?? "")}>
+          <SelectTrigger id="logs-filter-range">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All time</SelectItem>
+            <SelectItem value="1d">Last 24 hours</SelectItem>
+            <SelectItem value="7d">Last 7 days</SelectItem>
+            <SelectItem value="30d">Last 30 days</SelectItem>
+          </SelectContent>
+        </Select>
+      </Field>
       <Button type="submit" disabled={isPending}>
         Filter
       </Button>
-      {(filters.q || filters.provider || filters.status) && (
+      {(filters.q || filters.provider || filters.status || filters.range) && (
         <Button variant="ghost" render={<a href="/logs">Clear</a>} />
       )}
     </form>
