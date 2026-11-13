@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LogFilterBar } from "@/features/logs/components/log-filters";
+import { LogFilterCard } from "@/features/logs/components/log-filter-card";
 import { LogPagination } from "@/features/logs/components/log-pagination";
 import { LogTable } from "@/features/logs/components/log-table";
 import { filterSchema } from "@/features/logs/model/filters";
 import { findAllLogs } from "@/features/logs/server/find-all-logs";
 import { fetchTimezone } from "@/features/settings/server/fetch-timezone";
 import { PageTitle } from "@/shared/components/page-title";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/shared/components/ui/accordion";
 import { Card, CardContent } from "@/shared/components/ui/card";
 
 export const metadata: Metadata = {
@@ -61,18 +55,7 @@ export default async function LogsPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <PageTitle>Logs</PageTitle>
-      <Card>
-        <CardContent>
-          <Accordion defaultValue={isFiltered ? ["filters"] : []}>
-            <AccordionItem value="filters" className="border-b-0">
-              <AccordionTrigger className="p-0">Filters</AccordionTrigger>
-              <AccordionContent>
-                <LogFilterBar filters={filters} />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </CardContent>
-      </Card>
+      <LogFilterCard filters={filters} isFiltered={isFiltered} />
       <Card>
         <CardContent className="overflow-x-auto">
           {data.totalCount === 0 ? (
