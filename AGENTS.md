@@ -8,7 +8,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Commits
+## Contributing
 
-Always commit with `git commit -s` (DCO). See
-[CONTRIBUTING.md](CONTRIBUTING.md#developer-certificate-of-origin).
+Always read [CONTRIBUTING.md](CONTRIBUTING.md) first.

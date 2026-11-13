@@ -43,6 +43,11 @@ Add tests for behavior changes. Most tests live next to the code as
 
 ## Commit and pull request conventions
 
+Create pull requests with the body from
+[`.github/pull_request_template.md`](.github/pull_request_template.md), keeping
+its sections and checkboxes: fill in Summary, link the related issue, and tick
+the Testing items you ran.
+
 This repository uses [Conventional Commits](https://www.conventionalcommits.org/)
 so that release-please can generate changelogs and versions.
 
