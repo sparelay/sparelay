@@ -1,14 +1,21 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition, type ReactNode, type SubmitEvent } from "react";
+import { useEffect, useState, useTransition, type ReactNode, type SubmitEvent } from "react";
 
 import { FailBadge } from "@/features/logs/components/fail-badge";
 import { OkBadge } from "@/features/logs/components/ok-badge";
 import type { LogFilters } from "@/features/logs/model/filters";
 import { ProviderTag } from "@/features/provider/components/provider-tag";
 import { PROVIDER_REGISTRY, type ProviderType } from "@/features/provider/model/provider";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/shared/components/ui/accordion";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
+import { Card, CardContent } from "@/shared/components/ui/card";
 import { Field, FieldLabel } from "@/shared/components/ui/field";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -20,11 +27,11 @@ import {
 } from "@/shared/components/ui/select";
 import { RANGES } from "@/shared/lib/ranges";
 
-interface Props {
+interface BarProps {
   filters: LogFilters;
 }
 
-export function LogFilterBar({ filters }: Props) {
+function LogFilterBar({ filters }: BarProps) {
   const router = useRouter();
   const [query, setQuery] = useState(filters.q ?? "");
   const [provider, setProvider] = useState(filters.provider ?? "");
@@ -157,5 +164,46 @@ export function LogFilterBar({ filters }: Props) {
         )}
       </div>
     </form>
+  );
+}
+
+function useDesktop(): boolean {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    setIsDesktop(mq.matches);
+    const onChange = (event: MediaQueryListEvent) => setIsDesktop(event.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return isDesktop;
+}
+
+interface Props {
+  filters: LogFilters;
+  isFiltered: boolean;
+}
+
+export function LogFilterCard({ filters, isFiltered }: Props) {
+  const isDesktop = useDesktop();
+  const [open, setOpen] = useState(isFiltered);
+  const value = isDesktop || open ? ["filters"] : [];
+
+  return (
+    <Card>
+      <CardContent>
+        <Accordion
+          value={value}
+          onValueChange={(next) => setOpen(Array.isArray(next) && next.includes("filters"))}
+        >
+          <AccordionItem value="filters" className="border-b-0">
+            <AccordionTrigger className="sm:hidden">Filters</AccordionTrigger>
+            <AccordionContent className="sm:mt-0">
+              <LogFilterBar filters={filters} />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </CardContent>
+    </Card>
   );
 }

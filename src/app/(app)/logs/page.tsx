@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LogFilterCard } from "@/features/logs/components/log-filter-card";
+import { LogFilterCard } from "@/features/logs/components/log-filters";
 import { LogPagination } from "@/features/logs/components/log-pagination";
 import { LogTable } from "@/features/logs/components/log-table";
 import { filterSchema } from "@/features/logs/model/filters";
