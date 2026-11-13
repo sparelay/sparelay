@@ -63,7 +63,7 @@ export function SiteHeader() {
             <Moon className="h-4 w-4 dark:hidden" />
           </Button>
           <Button
-            variant="ghost"
+            variant="destructive"
             size="icon"
             aria-label="Logout"
             className="hidden md:inline-flex"
@@ -116,7 +116,7 @@ export function SiteHeader() {
             ))}
             <div className="my-2 border-t" />
             <Button
-              variant="ghost"
+              variant="destructive"
               size="sm"
               className="justify-start"
               onClick={() => {
