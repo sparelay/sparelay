@@ -29,16 +29,16 @@ import { RANGES } from "@/shared/lib/ranges";
 
 interface Props {
   filters: LogFilters;
-  isFiltered: boolean;
 }
 
-export function LogFilters({ filters, isFiltered }: Props) {
+export function LogFilters({ filters }: Props) {
   const router = useRouter();
   const [query, setQuery] = useState(filters.q ?? "");
   const [provider, setProvider] = useState(filters.provider ?? "");
   const [status, setStatus] = useState(filters.status ?? "");
   const [range, setRange] = useState(filters.range ?? "");
   const [isPending, startTransition] = useTransition();
+  const isFiltered = Boolean(filters.q || filters.provider || filters.status || filters.range);
 
   const providerItems: Record<string, ReactNode> = {
     "": "All providers",

@@ -55,7 +55,7 @@ export default async function LogsPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col gap-4">
       <PageTitle>Logs</PageTitle>
-      <LogFilters filters={filters} isFiltered={isFiltered} />
+      <LogFilters filters={filters} />
       <Card>
         <CardContent className="overflow-x-auto">
           {data.totalCount === 0 ? (
