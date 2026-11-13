@@ -37,6 +37,8 @@ export function ProviderTable({ range, tz }: Props) {
     });
   }, [range]);
 
+  const used = providers.filter((p) => p.calls >= 1);
+
   return (
     <Card>
       <CardHeader>
@@ -56,7 +58,7 @@ export function ProviderTable({ range, tz }: Props) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {providers.map((p) => (
+            {used.map((p) => (
               <TableRow key={p.id}>
                 <TableCell className="font-medium">
                   {p.name}
@@ -78,13 +80,19 @@ export function ProviderTable({ range, tz }: Props) {
                 </TableCell>
               </TableRow>
             ))}
-            {providers.length === 0 && (
+            {providers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center text-muted-foreground">
                   No providers registered
                 </TableCell>
               </TableRow>
-            )}
+            ) : used.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center text-muted-foreground">
+                  No calls in this range
+                </TableCell>
+              </TableRow>
+            ) : null}
           </TableBody>
         </Table>
       </CardContent>
