@@ -60,13 +60,18 @@ export function LogFilterBar({ filters }: Props) {
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const params = new URLSearchParams();
-    if (query.trim()) params.set("q", query.trim());
-    if (provider) params.set("provider", provider);
-    if (status) params.set("status", status);
-    if (range) params.set("range", range);
-    const search = params.toString();
+    const isClear = event.submitter?.hasAttribute("data-clear") ?? false;
     startTransition(() => {
+      if (isClear) {
+        router.push("/logs");
+        return;
+      }
+      const params = new URLSearchParams();
+      if (query.trim()) params.set("q", query.trim());
+      if (provider) params.set("provider", provider);
+      if (status) params.set("status", status);
+      if (range) params.set("range", range);
+      const search = params.toString();
       router.push(search ? `/logs?${search}` : "/logs");
     });
   };
@@ -150,7 +155,9 @@ export function LogFilterBar({ filters }: Props) {
         Filter
       </Button>
       {(filters.q || filters.provider || filters.status || filters.range) && (
-        <Button variant="ghost" nativeButton={false} render={<a href="/logs">Clear</a>} />
+        <Button type="submit" variant="ghost" data-clear="" disabled={isPending}>
+          Clear
+        </Button>
       )}
     </form>
   );
