@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { LogFilterBar } from "@/features/logs/components/log-filters";
 import { LogPagination } from "@/features/logs/components/log-pagination";
 import { LogTable } from "@/features/logs/components/log-table";
-import { parseLogFilters } from "@/features/logs/model/filters";
+import { filterSchema } from "@/features/logs/model/filters";
 import { findAllLogs } from "@/features/logs/server/find-all-logs";
 import { fetchTimezone } from "@/features/settings/server/fetch-timezone";
 import { PageTitle } from "@/shared/components/page-title";
@@ -24,7 +24,7 @@ export default async function LogsPage({ searchParams }: Props) {
   const params = await searchParams;
   const parsed = Number(params.page);
   const page = Number.isInteger(parsed) ? parsed : 1;
-  const filters = parseLogFilters(params);
+  const filters = filterSchema.parse(params);
 
   const data = findAllLogs(PAGE_SIZE, page, filters);
   if (data.page.current !== page) {

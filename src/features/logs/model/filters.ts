@@ -8,11 +8,3 @@ export const filterSchema = z.object({
 });
 
 export type LogFilters = z.output<typeof filterSchema>;
-
-export function parseLogFilters(params: {
-  q?: string;
-  provider?: string;
-  status?: string;
-}): LogFilters {
-  return filterSchema.parse(params);
-}
