@@ -22,8 +22,7 @@ type Props = {
 
 export default async function LogsPage({ searchParams }: Props) {
   const params = await searchParams;
-  const parsed = Number(params.page);
-  const page = Number.isInteger(parsed) ? parsed : 1;
+  const page = Number.isInteger(Number(params.page)) ? Number(params.page) : 1;
   const filters = filterSchema.parse(params);
 
   const data = findAllLogs(PAGE_SIZE, page, filters);
