@@ -39,7 +39,7 @@ export default async function LogsPage({ searchParams }: Props) {
   if (filters.q) filterParams.set("q", filters.q);
   if (filters.provider) filterParams.set("provider", filters.provider);
   if (filters.status) filterParams.set("status", filters.status);
-  const filtered = Boolean(filters.q || filters.provider || filters.status);
+  const isFiltered = Boolean(filters.q || filters.provider || filters.status);
   const rangeStart = (data.page.current - 1) * data.page.size + 1;
   const rangeEnd = Math.min(data.page.current * data.page.size, data.totalCount);
   const tz = fetchTimezone();
@@ -54,7 +54,7 @@ export default async function LogsPage({ searchParams }: Props) {
           </div>
           {data.totalCount === 0 ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
-              {filtered ? "No matching logs" : "No history"}
+              {isFiltered ? "No matching logs" : "No history"}
             </p>
           ) : (
             <>
