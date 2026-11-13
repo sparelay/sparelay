@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
+import { RANGES } from "@/shared/lib/ranges";
 
 interface Props {
   filters: LogFilters;
@@ -47,8 +48,13 @@ export function LogFilterBar({ filters }: Props) {
   };
   const rangeItems: Record<string, string> = {
     "": "All time",
+    "1h": "Last hour",
+    "6h": "Last 6 hours",
+    "12h": "Last 12 hours",
     "1d": "Last 24 hours",
+    "3d": "Last 3 days",
     "7d": "Last 7 days",
+    "14d": "Last 14 days",
     "30d": "Last 30 days",
   };
 
@@ -132,9 +138,11 @@ export function LogFilterBar({ filters }: Props) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="">All time</SelectItem>
-            <SelectItem value="1d">Last 24 hours</SelectItem>
-            <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
+            {RANGES.map((r) => (
+              <SelectItem key={r} value={r}>
+                {rangeItems[r]}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </Field>

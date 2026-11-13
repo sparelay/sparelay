@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import type { Range } from "../model/types";
+import type { Range } from "@/shared/lib/ranges";
+
 import { AvgLatencyCard } from "./kpi/avg-latency-card";
 import { FallbacksCard } from "./kpi/fallbacks-card";
 import { P95LatencyCard } from "./kpi/p95-latency-card";

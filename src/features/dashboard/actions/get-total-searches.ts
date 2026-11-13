@@ -1,10 +1,10 @@
 "use server";
 
 import { requireSessionOrRedirect } from "@/shared/auth/guard";
+import type { Range } from "@/shared/lib/ranges";
+import { rangeHours } from "@/shared/lib/ranges";
 import type { ServerActionResult } from "@/shared/types";
 
-import { rangeHours } from "../lib/ranges";
-import type { Range } from "../model/types";
 import { countTotalSearches } from "../server/count-total-searches";
 
 export async function getTotalSearches(range: Range): Promise<ServerActionResult<number>> {

@@ -3,8 +3,9 @@ import { and, asc, sql } from "drizzle-orm";
 
 import { getDb } from "@/shared/db/client";
 import { searchLogsTable } from "@/shared/db/schemas";
+import { sinceModifier } from "@/shared/lib/ranges";
 
-import { percentile, sinceModifier } from "../lib/ranges";
+import { percentile } from "../lib/ranges";
 
 export function fetchP95Latency(hours: number): number {
   const since = sinceModifier(hours);

@@ -3,8 +3,7 @@ import { and, avg, sql } from "drizzle-orm";
 
 import { getDb } from "@/shared/db/client";
 import { searchLogsTable } from "@/shared/db/schemas";
-
-import { sinceModifier } from "../lib/ranges";
+import { sinceModifier } from "@/shared/lib/ranges";
 
 export function fetchAvgLatency(hours: number): number {
   const since = sinceModifier(hours);

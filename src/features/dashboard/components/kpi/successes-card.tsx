@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+import type { Range } from "@/shared/lib/ranges";
+
 import { getSuccesses } from "../../actions/get-successes";
-import type { Range } from "../../model/types";
 import { KpiCard } from "./kpi-card";
 
 interface Props {
