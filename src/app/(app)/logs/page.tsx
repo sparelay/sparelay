@@ -61,7 +61,7 @@ export default async function LogsPage({ searchParams }: Props) {
               <LogTable rows={data.rows} tz={tz} />
               <div className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-center text-sm text-muted-foreground sm:text-left">
-                  {`${rangeStart}–${rangeEnd} of ${data.totalCount}`}
+                  {`${rangeStart}-${rangeEnd} of ${data.totalCount}`}
                 </p>
                 <LogPagination
                   page={data.page.current}
