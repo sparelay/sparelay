@@ -19,11 +19,7 @@ const NAV = [
   { href: "/settings", label: "Settings" },
 ];
 
-interface Props {
-  version: string;
-}
-
-export function SiteHeader({ version }: Props) {
+export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -59,7 +55,7 @@ export function SiteHeader({ version }: Props) {
         </nav>
         <div className="ml-auto flex items-center gap-1">
           <Badge variant="outline" className="hidden text-muted-foreground sm:inline-flex">
-            v{version}
+            v{process.env.NEXT_PUBLIC_APP_VERSION}
           </Badge>
           <Button
             variant="ghost"
