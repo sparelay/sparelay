@@ -1,44 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import { z } from "zod";
 
 import { createLog } from "@/features/logs/server/create-log";
-import { searchInputSchema } from "@/features/search/model/search";
+import { buildSearchToolResult } from "@/features/mcp/model/result";
+import { inputSchema, outputSchema, searchWebDescription } from "@/features/mcp/model/schema";
 import { search } from "@/features/search/server/search";
 import { requireApiKey } from "@/shared/auth/guard";
 
 import pkg from "../../../package.json";
-import { buildSearchToolResult } from "./tool-result";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const inputSchema = searchInputSchema.extend({
-  query: searchInputSchema.shape.query.describe("Search query"),
-  count: searchInputSchema.shape.count.describe("Max results (default 10)"),
-});
-
-const outputSchema = {
-  results: z.array(
-    z.object({
-      link: z.string().describe("Result URL"),
-      title: z.string(),
-      snippet: z.string(),
-    }),
-  ),
-  provider: z
-    .object({ name: z.string(), type: z.string() })
-    .nullable()
-    .describe("Provider that produced the results, null when none did"),
-  attempts: z.number().describe("Providers tried before the result"),
-  durationMs: z.number(),
-  status: z
-    .enum(["success", "empty", "error"])
-    .describe(
-      "success: results found; empty: no results without errors; error: every attempt failed",
-    ),
-  message: z.string().nullable().describe("Failure reason when status is error"),
-};
 
 function buildServer() {
   const server = new McpServer({ name: pkg.name, version: pkg.version });
@@ -46,8 +18,7 @@ function buildServer() {
   server.registerTool(
     "search_web",
     {
-      description:
-        "Search the web via the gateway fallback chain. Returns results with link/title/snippet plus the provider that handled the query, attempts, status (success/empty/error), and durationMs.",
+      description: searchWebDescription,
       inputSchema,
       outputSchema,
     },

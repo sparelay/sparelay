@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { SearchResponse } from "@/features/search/model/search";
 
-import { buildSearchToolResult } from "./tool-result";
+import { buildSearchToolResult } from "./result";
 
 const result = { link: "https://example.com", title: "Example", snippet: "snippet" };
 
