@@ -10,15 +10,37 @@ import {
   YAxis,
 } from "recharts";
 
+import { TOOLTIP_STYLE, type TimeBucket } from "@/features/dashboard/lib/charts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 
-import { TOOLTIP_STYLE, type LatencyBin } from "../lib/charts";
+const LATENCY_BINS = [
+  { max: 200, label: "<200ms" },
+  { max: 400, label: "200-400" },
+  { max: 600, label: "400-600" },
+  { max: 800, label: "600-800" },
+  { max: 1000, label: "800ms-1s" },
+  { max: 1500, label: "1-1.5s" },
+  { max: 2000, label: "1.5-2s" },
+  { max: Infinity, label: "2s+" },
+];
 
-interface Props {
-  bins: LatencyBin[];
+interface LatencyBin {
+  label: string;
+  count: number;
 }
 
-export function LatencyHistogramChart({ bins }: Props) {
+function latencyHistogram(buckets: TimeBucket[]): LatencyBin[] {
+  const points = buckets.flatMap(({ points: pts }) => pts);
+  const bounds = [0, ...LATENCY_BINS.map((bin) => bin.max)];
+  return LATENCY_BINS.map((bin, i) => ({
+    label: bin.label,
+    count: points.filter((p) => p.d >= bounds[i] && p.d < bin.max).length,
+  }));
+}
+
+export function LatencyHistogramChart({ buckets }: { buckets: TimeBucket[] }) {
+  const data = latencyHistogram(buckets);
+
   return (
     <Card>
       <CardHeader>
@@ -26,7 +48,7 @@ export function LatencyHistogramChart({ bins }: Props) {
       </CardHeader>
       <CardContent className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={bins}>
+          <ComposedChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis
               dataKey="label"

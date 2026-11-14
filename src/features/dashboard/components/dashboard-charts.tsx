@@ -6,13 +6,7 @@ import { type Point } from "@/features/dashboard/model/types";
 import type { Range } from "@/shared/lib/ranges";
 
 import { getPoints } from "../actions/get-points";
-import {
-  latencyHistogram,
-  providerBuckets,
-  providerSeries,
-  timeBuckets,
-  trendBuckets,
-} from "../lib/charts";
+import { timeBuckets } from "../lib/charts";
 import { LatencyHistogramChart } from "./latency-histogram-chart";
 import { ProviderBreakdownChart } from "./provider-breakdown-chart";
 import { TrendChart } from "./trend-chart";
@@ -38,9 +32,9 @@ export function DashboardCharts({ range, tz }: Props) {
 
   return (
     <>
-      <TrendChart buckets={trendBuckets(buckets)} />
-      <ProviderBreakdownChart buckets={providerBuckets(buckets)} series={providerSeries(buckets)} />
-      <LatencyHistogramChart bins={latencyHistogram(buckets)} />
+      <TrendChart buckets={buckets} />
+      <ProviderBreakdownChart buckets={buckets} />
+      <LatencyHistogramChart buckets={buckets} />
     </>
   );
 }

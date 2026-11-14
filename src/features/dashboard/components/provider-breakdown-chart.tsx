@@ -11,19 +11,53 @@ import {
   YAxis,
 } from "recharts";
 
+import { TOOLTIP_STYLE, type TimeBucket } from "@/features/dashboard/lib/charts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 
-import { TOOLTIP_STYLE, type ProviderBucket } from "../lib/charts";
-
+const TOP_PROVIDERS = 4;
 const PROVIDER_COLORS = ["var(--chart-1)", "#16a34a", "#f59e0b", "#8b5cf6"];
 const OTHER_COLOR = "#94a3b8";
 
-interface Props {
-  buckets: ProviderBucket[];
-  series: string[];
+interface ProviderBucket {
+  label: string;
+  providers: Record<string, number>;
 }
 
-export function ProviderBreakdownChart({ buckets, series }: Props) {
+function providerSeries(buckets: TimeBucket[]): string[] {
+  const counts = new Map<string, number>();
+  for (const { points: pts } of buckets) {
+    for (const pt of pts) {
+      const name = pt.provider ?? "Unknown";
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+  }
+  const top = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .slice(0, TOP_PROVIDERS)
+    .map(([name]) => name);
+  if (counts.size > top.length) top.push("Other");
+  return top;
+}
+
+function providerBuckets(buckets: TimeBucket[]): ProviderBucket[] {
+  const series = providerSeries(buckets);
+  const top = new Set(series.filter((name) => name !== "Other"));
+  return buckets.map(({ label, points: pts }) => {
+    const providers: Record<string, number> = {};
+    for (const name of series) providers[name] = 0;
+    for (const pt of pts) {
+      const name = pt.provider ?? "Unknown";
+      const key = top.has(name) ? name : "Other";
+      providers[key] += 1;
+    }
+    return { label, providers };
+  });
+}
+
+export function ProviderBreakdownChart({ buckets }: { buckets: TimeBucket[] }) {
+  const series = providerSeries(buckets);
+  const data = providerBuckets(buckets);
+
   return (
     <Card>
       <CardHeader>
@@ -31,7 +65,7 @@ export function ProviderBreakdownChart({ buckets, series }: Props) {
       </CardHeader>
       <CardContent className="h-64">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={buckets}>
+          <ComposedChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
             <XAxis
               dataKey="label"
