@@ -1,30 +1,6 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { z } from "zod";
 
 import type { SearchResponse } from "@/features/search/model/search";
-
-/** JSON Schema (zod raw shape) for the `search_web` structured result. */
-export const searchWebOutputSchema = {
-  results: z.array(
-    z.object({
-      link: z.string().describe("Result URL"),
-      title: z.string(),
-      snippet: z.string(),
-    }),
-  ),
-  provider: z
-    .object({ name: z.string(), type: z.string() })
-    .nullable()
-    .describe("Provider that produced the results, null when none did"),
-  attempts: z.number().describe("Providers tried before the result"),
-  durationMs: z.number(),
-  status: z
-    .enum(["success", "empty", "error"])
-    .describe(
-      "success: results found; empty: no results without errors; error: every attempt failed",
-    ),
-  message: z.string().nullable().describe("Failure reason when status is error"),
-} satisfies Record<string, z.ZodType>;
 
 export type SearchToolStatus = "success" | "empty" | "error";
 

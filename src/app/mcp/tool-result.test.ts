@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { SearchResponse } from "@/features/search/model/search";
 
-import { buildSearchToolResult, searchWebOutputSchema } from "./tool-result";
+import { buildSearchToolResult } from "./tool-result";
 
 const result = { link: "https://example.com", title: "Example", snippet: "snippet" };
 
@@ -66,11 +66,5 @@ describe("buildSearchToolResult", () => {
       type: "text",
       text: "Search failed: All providers are cooling down",
     });
-  });
-
-  it("declares an output schema covering every structured field", () => {
-    expect(Object.keys(searchWebOutputSchema).sort()).toEqual(
-      ["attempts", "durationMs", "message", "provider", "results", "status"].sort(),
-    );
   });
 });
