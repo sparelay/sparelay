@@ -71,7 +71,7 @@ describe("search", () => {
     expect(result.results).toEqual([hit]);
     expect(result.provider).toEqual({ name: "A", type: "tavily" });
     expect(result.attempts).toBe(1);
-    expect(result.status).toEqual({ type: "success", message: null });
+    expect(result.status).toEqual({ type: "success", reason: null, message: null });
   });
 
   it("falls back when a provider returns no results and fallbackOnEmpty is set", async () => {
@@ -100,7 +100,23 @@ describe("search", () => {
 
     expect(result.results).toEqual([]);
     expect(result.provider).toEqual({ name: "A", type: "tavily" });
-    expect(result.status).toEqual({ type: "success", message: null });
+    expect(result.status).toEqual({ type: "empty", reason: "all-empty", message: null });
+  });
+
+  it("returns an empty status when every provider runs out of results", async () => {
+    vi.mocked(findAllEnabledProviders).mockReturnValue([
+      row({ name: "A", fallbackOnEmpty: true }),
+      row({ name: "B", fallbackOnEmpty: true }),
+    ]);
+    vi.mocked(createProvider)
+      .mockReturnValueOnce(provider("A", async () => []))
+      .mockReturnValueOnce(provider("B", async () => []));
+
+    const result = await search("q", 5);
+
+    expect(result.attempts).toBe(2);
+    expect(result.results).toEqual([]);
+    expect(result.status).toEqual({ type: "empty", reason: "all-empty", message: null });
   });
 
   it("tries the next provider when one throws", async () => {
@@ -137,7 +153,7 @@ describe("search", () => {
 
     expect(result.provider).toBeNull();
     expect(result.results).toEqual([]);
-    expect(result.status).toEqual({ type: "error", message: "second" });
+    expect(result.status).toEqual({ type: "error", reason: "all-failed", message: "second" });
   });
 
   it("skips providers that are cooling down", async () => {
@@ -162,7 +178,11 @@ describe("search", () => {
     const result = await search("q", 5);
 
     expect(result.attempts).toBe(0);
-    expect(result.status).toEqual({ type: "error", message: "All providers are cooling down" });
+    expect(result.status).toEqual({
+      type: "error",
+      reason: "all-cooling",
+      message: "All providers are cooling down",
+    });
     expect(createProvider).not.toHaveBeenCalled();
   });
 
@@ -199,7 +219,11 @@ describe("search", () => {
     const result = await search("q", 5);
 
     expect(result.attempts).toBe(0);
-    expect(result.status).toEqual({ type: "error", message: "No provider returned results" });
+    expect(result.status).toEqual({
+      type: "error",
+      reason: "timeout",
+      message: "Search timed out",
+    });
     expect(createProvider).not.toHaveBeenCalled();
   });
 });
@@ -216,7 +240,7 @@ describe("searchByProvider", () => {
     expect(result.results).toEqual([hit]);
     expect(result.provider).toEqual({ name: "A", type: "tavily" });
     expect(result.attempts).toBe(1);
-    expect(result.status).toEqual({ type: "success", message: null });
+    expect(result.status).toEqual({ type: "success", reason: null, message: null });
   });
 
   it("returns the error and keeps the attempted provider", async () => {
@@ -231,7 +255,7 @@ describe("searchByProvider", () => {
 
     expect(result.results).toEqual([]);
     expect(result.provider).toEqual({ name: "A", type: "tavily" });
-    expect(result.status).toEqual({ type: "error", message: "boom" });
+    expect(result.status).toEqual({ type: "error", reason: "all-failed", message: "boom" });
   });
 
   it("starts a cooldown on 429 with the explicit cooldown seconds", async () => {
