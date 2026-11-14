@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { logoutAction } from "@/shared/auth/actions/logout";
+import { Badge } from "@/shared/components/ui/badge";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 
 const NAV = [
@@ -53,6 +54,9 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-1">
+          <Badge variant="outline" className="text-muted-foreground">
+            v{process.env.NEXT_PUBLIC_APP_VERSION}
+          </Badge>
           <Button
             variant="ghost"
             size="icon"
