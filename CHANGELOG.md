@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/sparelay/sparelay/compare/0.3.0...0.4.0) (2026-11-14)
+
+
+### Features
+
+* return structured search results from the MCP tool ([#27](https://github.com/sparelay/sparelay/issues/27)) ([f09dfce](https://github.com/sparelay/sparelay/commit/f09dfce84872d10e1c14da83c2c6072115ab5d8a))
+
 ## [0.3.0](https://github.com/sparelay/sparelay/compare/0.2.0...0.3.0) (2026-11-14)
 
 
