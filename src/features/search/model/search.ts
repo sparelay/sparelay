@@ -11,9 +11,24 @@ export interface SearchResult {
   snippet: string;
 }
 
+export type SearchStatusType = "success" | "empty" | "error";
+
+export type SearchStatusReason =
+  | "no-providers"
+  | "all-cooling"
+  | "all-empty"
+  | "all-failed"
+  | "timeout";
+
+export interface SearchStatus {
+  type: SearchStatusType;
+  reason: SearchStatusReason | null;
+  message: string | null;
+}
+
 export interface SearchResponse {
   results: SearchResult[];
   provider: { name: string; type: string } | null;
   attempts: number;
-  status: { type: "success" | "error"; message: string | null };
+  status: SearchStatus;
 }

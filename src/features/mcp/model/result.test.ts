@@ -11,7 +11,7 @@ function outcome(overrides: Partial<SearchResponse> = {}): SearchResponse {
     results: [],
     provider: null,
     attempts: 0,
-    status: { type: "success", message: null },
+    status: { type: "success", reason: null, message: null },
     ...overrides,
   };
 }
@@ -23,7 +23,7 @@ describe("buildSearchToolResult", () => {
         results: [result],
         provider: { name: "Exa", type: "exa" },
         attempts: 1,
-        status: { type: "success", message: null },
+        status: { type: "success", reason: null, message: null },
       }),
       123,
     );
@@ -40,8 +40,11 @@ describe("buildSearchToolResult", () => {
     expect(res.content?.[0]).toMatchObject({ type: "text", text: JSON.stringify([result]) });
   });
 
-  it("marks a success without results as empty, not error", () => {
-    const res = buildSearchToolResult(outcome({ status: { type: "success", message: null } }), 50);
+  it("keeps an empty search distinct from success and error", () => {
+    const res = buildSearchToolResult(
+      outcome({ status: { type: "empty", reason: "all-empty", message: null } }),
+      50,
+    );
 
     expect(res.isError).toBe(false);
     expect(res.structuredContent).toMatchObject({ status: "empty", results: [] });
@@ -51,7 +54,7 @@ describe("buildSearchToolResult", () => {
     const res = buildSearchToolResult(
       outcome({
         attempts: 3,
-        status: { type: "error", message: "All providers are cooling down" },
+        status: { type: "error", reason: "all-cooling", message: "All providers are cooling down" },
       }),
       90,
     );
