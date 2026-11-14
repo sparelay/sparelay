@@ -7,6 +7,7 @@ import { search } from "@/features/search/server/search";
 import { requireApiKey } from "@/shared/auth/guard";
 
 import pkg from "../../../package.json";
+import { buildSearchToolResult, searchWebOutputSchema } from "./tool-result";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,25 +24,27 @@ function buildServer() {
     "search_web",
     {
       description:
-        "Search the web via the gateway fallback chain. Returns title/url/snippet per result.",
+        "Search the web via the gateway fallback chain. Returns results with link/title/snippet plus the provider that handled the query, attempts, status (success/empty/error), and durationMs.",
       inputSchema: mcpSearchInputSchema,
+      outputSchema: searchWebOutputSchema,
     },
     async ({ query, count }) => {
       try {
         const started = Date.now();
         const outcome = await search(query, count);
+        const durationMs = Date.now() - started;
         createLog({
           query,
           providerName: outcome.provider?.name ?? null,
           providerType: outcome.provider?.type ?? null,
           attempts: outcome.attempts,
           resultsCount: outcome.results.length,
-          durationMs: Date.now() - started,
+          durationMs,
           success: outcome.status.type === "success",
           source: "mcp",
           resultsJson: outcome.results,
         });
-        return { content: [{ type: "text", text: JSON.stringify(outcome.results) }] };
+        return buildSearchToolResult(outcome, durationMs);
       } catch (error) {
         return {
           content: [
