@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { logoutAction } from "@/shared/auth/actions/logout";
+import { Badge } from "@/shared/components/ui/badge";
 import { Button, buttonVariants } from "@/shared/components/ui/button";
 
 const NAV = [
@@ -18,7 +19,11 @@ const NAV = [
   { href: "/settings", label: "Settings" },
 ];
 
-export function SiteHeader() {
+interface Props {
+  version: string;
+}
+
+export function SiteHeader({ version }: Props) {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -53,6 +58,9 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-1">
+          <Badge variant="outline" className="hidden text-muted-foreground sm:inline-flex">
+            v{version}
+          </Badge>
           <Button
             variant="ghost"
             size="icon"
