@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { Range } from "@/shared/lib/ranges";
 
+import { DashboardCharts } from "./dashboard-charts";
 import { AvgLatencyCard } from "./kpi/avg-latency-card";
 import { FallbacksCard } from "./kpi/fallbacks-card";
 import { P95LatencyCard } from "./kpi/p95-latency-card";
@@ -12,7 +13,6 @@ import { SuccessesCard } from "./kpi/successes-card";
 import { TotalSearchesCard } from "./kpi/total-searches-card";
 import { ProviderTable } from "./provider-table";
 import { RangeTabs } from "./range-tabs";
-import { TrendChart } from "./trend-chart";
 
 interface Props {
   tz: string;
@@ -33,7 +33,7 @@ export function Dashboard({ tz }: Props) {
         <FallbacksCard range={range} />
       </div>
       <ProviderTable range={range} tz={tz} />
-      <TrendChart range={range} tz={tz} />
+      <DashboardCharts range={range} tz={tz} />
     </div>
   );
 }
