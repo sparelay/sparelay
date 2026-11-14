@@ -11,8 +11,15 @@ import {
   YAxis,
 } from "recharts";
 
-import { TOOLTIP_STYLE, type TimeBucket } from "@/features/dashboard/lib/charts";
+import type { Point } from "@/features/dashboard/model/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+
+const TOOLTIP_STYLE = {
+  backgroundColor: "var(--popover)",
+  border: "1px solid var(--border)",
+  borderRadius: "var(--radius)",
+  color: "var(--popover-foreground)",
+};
 
 const TOP_PROVIDERS = 4;
 const PROVIDER_COLORS = ["var(--chart-1)", "#16a34a", "#f59e0b", "#8b5cf6"];
@@ -23,7 +30,7 @@ interface ProviderBucket {
   providers: Record<string, number>;
 }
 
-function providerSeries(buckets: TimeBucket[]): string[] {
+function providerSeries(buckets: { label: string; points: Point[] }[]): string[] {
   const counts = new Map<string, number>();
   for (const { points: pts } of buckets) {
     for (const pt of pts) {
@@ -39,7 +46,7 @@ function providerSeries(buckets: TimeBucket[]): string[] {
   return top;
 }
 
-function providerBuckets(buckets: TimeBucket[]): ProviderBucket[] {
+function providerBuckets(buckets: { label: string; points: Point[] }[]): ProviderBucket[] {
   const series = providerSeries(buckets);
   const top = new Set(series.filter((name) => name !== "Other"));
   return buckets.map(({ label, points: pts }) => {
@@ -54,7 +61,11 @@ function providerBuckets(buckets: TimeBucket[]): ProviderBucket[] {
   });
 }
 
-export function ProviderBreakdownChart({ buckets }: { buckets: TimeBucket[] }) {
+export function ProviderBreakdownChart({
+  buckets,
+}: {
+  buckets: { label: string; points: Point[] }[];
+}) {
   const series = providerSeries(buckets);
   const data = providerBuckets(buckets);
 

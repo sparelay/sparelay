@@ -10,8 +10,15 @@ import {
   YAxis,
 } from "recharts";
 
-import { TOOLTIP_STYLE, type TimeBucket } from "@/features/dashboard/lib/charts";
+import type { Point } from "@/features/dashboard/model/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+
+const TOOLTIP_STYLE = {
+  backgroundColor: "var(--popover)",
+  border: "1px solid var(--border)",
+  borderRadius: "var(--radius)",
+  color: "var(--popover-foreground)",
+};
 
 const LATENCY_BINS = [
   { max: 200, label: "<200ms" },
@@ -29,7 +36,7 @@ interface LatencyBin {
   count: number;
 }
 
-function latencyHistogram(buckets: TimeBucket[]): LatencyBin[] {
+function latencyHistogram(buckets: { label: string; points: Point[] }[]): LatencyBin[] {
   const points = buckets.flatMap(({ points: pts }) => pts);
   const bounds = [0, ...LATENCY_BINS.map((bin) => bin.max)];
   return LATENCY_BINS.map((bin, i) => ({
@@ -38,7 +45,11 @@ function latencyHistogram(buckets: TimeBucket[]): LatencyBin[] {
   }));
 }
 
-export function LatencyHistogramChart({ buckets }: { buckets: TimeBucket[] }) {
+export function LatencyHistogramChart({
+  buckets,
+}: {
+  buckets: { label: string; points: Point[] }[];
+}) {
   const data = latencyHistogram(buckets);
 
   return (

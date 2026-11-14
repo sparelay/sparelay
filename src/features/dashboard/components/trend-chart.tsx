@@ -12,8 +12,15 @@ import {
   YAxis,
 } from "recharts";
 
-import { TOOLTIP_STYLE, type TimeBucket } from "@/features/dashboard/lib/charts";
+import type { Point } from "@/features/dashboard/model/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
+
+const TOOLTIP_STYLE = {
+  backgroundColor: "var(--popover)",
+  border: "1px solid var(--border)",
+  borderRadius: "var(--radius)",
+  color: "var(--popover-foreground)",
+};
 
 interface TrendBucket {
   label: string;
@@ -23,7 +30,7 @@ interface TrendBucket {
   rate: number | null;
 }
 
-function trendBuckets(buckets: TimeBucket[]): TrendBucket[] {
+function trendBuckets(buckets: { label: string; points: Point[] }[]): TrendBucket[] {
   return buckets.map(({ label, points: pts }) => {
     const success = pts.filter((p) => p.success).length;
     const fail = pts.length - success;
@@ -38,7 +45,7 @@ function trendBuckets(buckets: TimeBucket[]): TrendBucket[] {
   });
 }
 
-export function TrendChart({ buckets }: { buckets: TimeBucket[] }) {
+export function TrendChart({ buckets }: { buckets: { label: string; points: Point[] }[] }) {
   const data = trendBuckets(buckets);
 
   return (
