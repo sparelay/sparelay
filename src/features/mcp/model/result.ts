@@ -4,7 +4,7 @@ import type { SearchResponse } from "@/features/search/model/search";
 
 export type SearchToolStatus = "success" | "empty" | "error";
 
-export interface SearchToolStructured {
+interface SearchToolStructured {
   results: SearchResponse["results"];
   provider: SearchResponse["provider"];
   attempts: number;
@@ -18,11 +18,6 @@ function statusOf(outcome: SearchResponse): SearchToolStatus {
   return outcome.results.length > 0 ? "success" : "empty";
 }
 
-/**
- * Maps a search outcome to the MCP tool result: structured content for
- * clients that understand output schemas, a text fallback for the rest,
- * and isError so agents can tell a failed search from an empty one.
- */
 export function buildSearchToolResult(outcome: SearchResponse, durationMs: number): CallToolResult {
   const status = statusOf(outcome);
   const structured: SearchToolStructured = {

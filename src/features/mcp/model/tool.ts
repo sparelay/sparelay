@@ -29,5 +29,5 @@ export const outputSchema = {
   message: z.string().nullable().describe("Failure reason when status is error"),
 };
 
-export const searchWebDescription =
+export const description =
   "Search the web via the gateway fallback chain. Returns results with link/title/snippet plus the provider that handled the query, attempts, status (success/empty/error), and durationMs.";

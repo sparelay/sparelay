@@ -3,7 +3,7 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
 
 import { createLog } from "@/features/logs/server/create-log";
 import { buildSearchToolResult } from "@/features/mcp/model/result";
-import { inputSchema, outputSchema, searchWebDescription } from "@/features/mcp/model/schema";
+import { inputSchema, outputSchema, description } from "@/features/mcp/model/tool";
 import { search } from "@/features/search/server/search";
 import { requireApiKey } from "@/shared/auth/guard";
 
@@ -18,7 +18,7 @@ function buildServer() {
   server.registerTool(
     "search_web",
     {
-      description: searchWebDescription,
+      description,
       inputSchema,
       outputSchema,
     },
