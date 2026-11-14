@@ -54,7 +54,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-1">
-          <Badge variant="outline" className="hidden text-muted-foreground sm:inline-flex">
+          <Badge variant="outline" className="text-muted-foreground">
             v{process.env.NEXT_PUBLIC_APP_VERSION}
           </Badge>
           <Button
