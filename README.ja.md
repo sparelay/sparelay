@@ -19,6 +19,33 @@ Sparelayはアプリケーションと検索APIの間に立ちます。契約済
 
 プロバイダー管理、検索プレイグラウンド、利用状況の分析、検索ログ、AIエージェント向けのMCPエンドポイントを備えたWeb UIも同梱しています。
 
+<table>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/dashboard.webp" width="446" alt="総検索数、成功率、レイテンシのパーセンタイル、フォールバック数、プロバイダー別統計、トレンドを表示するダッシュボード" />
+      <br />
+      <sub><b>ダッシュボード</b> — 総検索数、成功率、レイテンシのパーセンタイル、フォールバック数、1時間〜30日のトレンドを確認できます。</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/providers.webp" width="446" alt="フォールバック順に並んだ検索プロバイダーの一覧と、プロバイダーごとの有効/無効スイッチ" />
+      <br />
+      <sub><b>プロバイダー</b> — ドラッグ&ドロップでフォールバック順を並べ替え、プロバイダーごとに有効/無効を切り替えられます。</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/playground.webp" width="446" alt="クエリに対する結果の生JSONを表示する検索プレイグラウンド" />
+      <br />
+      <sub><b>プレイグラウンド</b> — <code>Auto</code>または任意のプロバイダーでクエリを実行し、生の結果を確認できます。</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/logs.webp" width="446" alt="日時、クエリ、プロバイダー、ソース、試行回数、結果数、実行時間、ステータスを表示する検索ログ" />
+      <br />
+      <sub><b>ログ</b> — クエリ、プロバイダー、ソース、試行回数、レイテンシ、ステータスをリクエストごとに記録します。</sub>
+    </td>
+  </tr>
+</table>
+
 ## 機能
 
 - **フォールバック優先のルーティング**。プロバイダーはドラッグ&ドロップで並べた順に試されます。失敗、タイムアウト、空の結果セット（`fallbackOnEmpty`が有効な場合）、`429`応答が発生すると、次のプロバイダーにリクエストを移動します。

@@ -3,21 +3,43 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/logo.svg" width="104" alt="Sparelay logo" />
+  <img src="docs/images/logo.webp" width="250" alt="Sparelay logo" />
 </p>
 
-<h1 align="center">Sparelay</h1>
-
-<p align="center">
-  <strong>One search API. Many providers. Automatic fallback.</strong><br />
+<h2 align="center">
   A self-hosted search gateway for OpenWebUI, LLM agents, and RAG pipelines.
-</p>
-
----
+</h2>
 
 Sparelay sits between your application and search APIs. Register the providers you already pay for, put them in the order you prefer, and call one stable endpoint. If a provider errors, times out, is rate-limited, or returns nothing, Sparelay tries the next one automatically and records what happened.
 
 It ships with a web UI for provider management, a search playground, usage analytics, search logs, and an MCP endpoint for AI agents.
+
+<table>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/dashboard.webp" width="446" alt="Dashboard showing total searches, success rate, latency percentiles, fallbacks, per-provider stats, and trends" />
+      <br />
+      <sub><b>Dashboard</b> — Total searches, success rate, latency percentiles, fallbacks, and trends from 1 hour to 30 days.</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/providers.webp" width="446" alt="Providers page listing search providers in fallback order with per-provider toggles" />
+      <br />
+      <sub><b>Providers</b> — Drag to set the fallback order and toggle each provider on or off.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/playground.webp" width="446" alt="Search playground showing raw JSON results for a query" />
+      <br />
+      <sub><b>Playground</b> — Run a query with <code>Auto</code> or a specific provider and inspect the raw results.</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <img src="docs/images/logs.webp" width="446" alt="Search logs table showing time, query, provider, source, attempts, results, duration, and status" />
+      <br />
+      <sub><b>Logs</b> — Every request with its query, provider, source, attempts, latency, and status.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Features
 
