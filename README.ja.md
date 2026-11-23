@@ -6,6 +6,15 @@
   <img src="docs/images/logo.svg" width="104" alt="Sparelayロゴ" />
 </p>
 
+<p align="center">
+  <a href="https://github.com/sparelay/sparelay/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/sparelay/sparelay/ci.yml?style=flat-square&label=CI&labelColor=1b1b1b&color=4A8F8C" alt="CIステータス" /></a>
+  <a href="https://github.com/sparelay/sparelay/releases/latest"><img src="https://img.shields.io/github/v/release/sparelay/sparelay?style=flat-square&labelColor=1b1b1b&color=4A8F8C" alt="最新リリース" /></a>
+  <a href="https://github.com/sparelay/sparelay/pkgs/container/sparelay"><img src="https://img.shields.io/badge/ghcr.io-sparelay%2Fsparelay-4A8F8C?style=flat-square&labelColor=1b1b1b" alt="GHCRのコンテナイメージ" /></a>
+  <a href="https://openwebui.com"><img src="https://img.shields.io/badge/OpenWebUI-compatible-4A8F8C?style=flat-square&labelColor=1b1b1b" alt="OpenWebUI互換" /></a>
+  <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-ready-4A8F8C?style=flat-square&labelColor=1b1b1b" alt="Model Context Protocolエンドポイント" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/sparelay/sparelay?style=flat-square&labelColor=1b1b1b&color=4A8F8C" alt="ライセンス: MIT" /></a>
+</p>
+
 <h1 align="center">Sparelay</h1>
 
 <p align="center">
@@ -15,36 +24,27 @@
 
 ---
 
+<p align="center">
+  <a href="#クイックスタート">クイックスタート</a> ·
+  <a href="#機能">機能</a> ·
+  <a href="#sparelayを選ぶ理由">Sparelayを選ぶ理由</a> ·
+  <a href="#仕組み">仕組み</a> ·
+  <a href="#インテグレーション">インテグレーション</a> ·
+  <a href="#対応プロバイダー">対応プロバイダー</a> ·
+  <a href="#設定">設定</a>
+</p>
+
 Sparelayはアプリケーションと検索APIの間に立ちます。契約済みのプロバイダーを登録し、好みの順序に並べ、安定した1つのエンドポイントを呼び出すだけです。プロバイダーがエラー、タイムアウト、レート制限、または空の結果を返した場合、Sparelayは自動的に次のプロバイダーを試し、その結果を記録します。
 
 プロバイダー管理、検索プレイグラウンド、利用状況の分析、検索ログ、AIエージェント向けのMCPエンドポイントを備えたWeb UIも同梱しています。
 
-<table>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <img src="docs/images/dashboard.webp" width="446" alt="総検索数、成功率、レイテンシのパーセンタイル、フォールバック数、プロバイダー別統計、トレンドを表示するダッシュボード" />
-      <br />
-      <sub><b>ダッシュボード</b> — 総検索数、成功率、レイテンシのパーセンタイル、フォールバック数、1時間〜30日のトレンドを確認できます。</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <img src="docs/images/providers.webp" width="446" alt="フォールバック順に並んだ検索プロバイダーの一覧と、プロバイダーごとの有効/無効スイッチ" />
-      <br />
-      <sub><b>プロバイダー</b> — ドラッグ&ドロップでフォールバック順を並べ替え、プロバイダーごとに有効/無効を切り替えられます。</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <img src="docs/images/playground.webp" width="446" alt="クエリに対する結果の生JSONを表示する検索プレイグラウンド" />
-      <br />
-      <sub><b>プレイグラウンド</b> — <code>Auto</code>または任意のプロバイダーでクエリを実行し、生の結果を確認できます。</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <img src="docs/images/logs.webp" width="446" alt="日時、クエリ、プロバイダー、ソース、試行回数、結果数、実行時間、ステータスを表示する検索ログ" />
-      <br />
-      <sub><b>ログ</b> — クエリ、プロバイダー、ソース、試行回数、レイテンシ、ステータスをリクエストごとに記録します。</sub>
-    </td>
-  </tr>
-</table>
+![ダッシュボード — 検索の健康状態をひと目で。成功率、レイテンシ、フォールバック、1時間〜30日のトレンド。](docs/images/banner/dashboard.webp)
+
+![プロバイダー — プロバイダーを好みの順に。ドラッグ&ドロップでフォールバック順を並べ替え、有効/無効を切り替え。](docs/images/banner/providers.webp)
+
+![プレイグラウンド — 1回のクエリで、すべての結果を。Autoまたは任意のプロバイダーで実行し、生のJSONを確認。](docs/images/banner/playground.webp)
+
+![ログ — すべてのリクエストを記録。クエリ、プロバイダー、試行回数、レイテンシ、ステータスを全件保存。](docs/images/banner/logs.webp)
 
 ## 機能
 
@@ -52,12 +52,21 @@ Sparelayはアプリケーションと検索APIの間に立ちます。契約済
 - **好きな検索サービスを持ち込める**。Tavily、Brave、Exa、SerpApi、Bright Dataなどの商用APIでも、SearXNGやMwmblなどのセルフホスト型エンジンでも利用できます。
 - **すべてを1つのインターフェースで**。OpenWebUI互換のHTTP検索、エージェント向けのMCPツール、ブラウザのプレイグラウンドが同じフォールバックエンジンを共有します。
 - **クールダウンを考慮**。`429`を受け取ると、設定した期間そのプロバイダーをクールダウン状態にし、毎回のリクエストで叩き続けることを防ぎます。
-- **標準で可観測性を搭載**。総検索数、成功数、成功率、平均レイテンシ、P95レイテンシ、フォールバック数、プロバイダー別統計、1時間〜30日のトレンドを確認できます。
-- **すべてのリクエストを確認**。検索ログには、クエリ、選択されたプロバイダー、試行回数、レイテンシ、ステータス、ソース、結果JSONが記録されます。
-- **デフォルトでセルフホスト**。すべてを自分の環境で実行でき、外部SaaSのコントロールプレーンは不要です。
-- **単一キー認証**。同じ`API_KEY`が管理UIのセッションとBearer認証のAPIを保護します。
+- **標準で可観測性を搭載**。総検索数、成功率、平均・P95レイテンシ、フォールバック数、プロバイダー別統計、1時間〜30日のトレンドに加え、クエリ、プロバイダー、試行回数、レイテンシ、ステータス、結果JSONを全件記録する検索ログを備えます。
+- **セルフホスト＆単一キー認証**。すべてを自分の環境で実行でき、外部SaaSのコントロールプレーンは不要です。同じ`API_KEY`が管理UIのセッションとBearer認証のAPIを保護します。
 
-## クイックセットアップ
+## Sparelayを選ぶ理由
+
+プロバイダーAPIを直接呼ぶと、リトライ・順序・レート制限の扱いをクライアントごとに実装することになります。Sparelayはそれを、一度設定すれば済む1つのサービスにまとめます。
+
+|                  | プロバイダーを直接呼ぶ                                  | Sparelay                                                 |
+| ---------------- | ------------------------------------------------------- | -------------------------------------------------------- |
+| フォールバック   | リトライ、順序、タイムアウトをクライアントごとに実装    | 順序を一度設定すれば、次のプロバイダーが自動で試される   |
+| レート制限       | `429`を返したプロバイダーにも各クライアントが叩き続ける | 設定した期間クールダウンし、自動でスキップする           |
+| 可観測性         | 失敗や遅延を共有して見る手段がない                      | ダッシュボード、プロバイダー別統計、検索ログを標準搭載   |
+| インターフェース | ベンダーごとにリクエスト形式が違う                      | HTTPエンドポイント、MCPツール、プレイグラウンドの3つだけ |
+
+## クイックスタート
 
 1. [Docker](https://docs.docker.com/engine/install/)とDocker Composeをインストールします。
 
@@ -105,16 +114,18 @@ Sparelayはアプリケーションと検索APIの間に立ちます。契約済
 
 ## 仕組み
 
-検索リクエストは次の流れで処理されます：
+検索リクエストは、どのインターフェースから呼ばれても同じ経路を通ります。
+
+![Sparelayの検索ルーティング：アプリがPOST /searchを1回送り、Sparelayがフォールバック順とタイムアウト予算を適用し、結果が返るまでプロバイダーを順に試します](docs/images/how-it-works.svg)
 
 1. **プロバイダーを絞り込む**。有効なプロバイダーのみを対象とし、保存された順序で並べます。
 2. **クールダウン中のプロバイダーをスキップ**。`cooldownUntil`が未来のプロバイダーはスキップします。
-3. **タイムバジェットを適用**。各プロバイダーには`min(プロバイダーのタイムアウト, 残りの全体タイムアウト)`が与えられます。全体タイムアウトは<strong>Settings</strong>で変更でき、デフォルトは30秒です。
+3. **タイムバジェットを適用**。各プロバイダーには全体タイムアウトの範囲内で上限が与えられます。全体タイムアウトは<strong>Settings</strong>で変更でき、デフォルトは30秒です。
 4. **プロバイダーを呼び出す**。プロバイダーはネイティブのレスポンスを`{ link, title, snippet }`に正規化します。
 5. **必要に応じてフォールバック**。エラー、タイムアウト、空のレスポンス（`fallbackOnEmpty`が有効な場合）は次のプロバイダーを試します。
 6. **結果を記録**。試行回数、レイテンシ、ステータス、ソース（`api`、`mcp`、`playground`）とともにリクエストをログに記録します。
 
-`429`応答を受け取り、そのプロバイダーのクールダウン値が0より大きい場合、クールダウンを開始します。クールダウンは0〜86,400秒で設定でき、プロバイダー一覧に表示されます。
+タイムアウトの計算式、クールダウンの範囲、ログの各フィールドは[How it works in depth](docs/how-it-works.md)（英語）にまとめています。
 
 ## インテグレーション
 
@@ -204,7 +215,7 @@ Content-Type: application/json
 | Scrape.do    | 必須    | `https://api.scrape.do`        |
 | Bright Data  | 必須    | `https://api.brightdata.com`   |
 
-追加のプロバイダーが必要な場合は、PRを出してください。
+必要なプロバイダーがない場合はIssueを立ててください。アダプターは小さくまとまった変更で、手順は[CONTRIBUTING.md](CONTRIBUTING.md#adding-a-provider)にあります。
 
 ## 設定
 
@@ -225,26 +236,24 @@ Content-Type: application/json
 
 ## コントリビューション
 
-コントリビューションを歓迎します。PRを開く前に[CONTRIBUTING.md](CONTRIBUTING.md)と[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)をお読みください。セキュリティ問題は[SECURITY.md](SECURITY.md)を参照してください。
+コントリビューションを歓迎します。まず[CONTRIBUTING.md](CONTRIBUTING.md)と[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)をお読みください。変更は焦点を絞り、動作変更にはテストを追加してください。
 
-変更は焦点を絞り、動作変更にはテストを追加してください。
+```bash
+bun install
+bun run typecheck && bun run lint && bun run test
+```
 
-1. リポジトリをフォークしてブランチを作成します。
-2. `bun install`を実行します。
-3. 変更を加えます。
-4. `bun run typecheck`、`bun run lint`、`bun run test`を実行します。
-5. コミット前に`bun run format`を実行します。
-6. 問題とアプローチを短く説明するプルリクエストを開きます。
+プロバイダーの追加は小さくまとまった変更です。手順は[Adding a provider](CONTRIBUTING.md#adding-a-provider)を参照してください。セキュリティ問題は公開Issueではなく[SECURITY.md](SECURITY.md)へお願いします。
 
-プロバイダーを追加する場合：
+## コミュニティ
 
-1. `src/features/provider/model/<type>/` にスキーマとデフォルト設定を追加します。
-2. `PROVIDER_REGISTRY`に登録します。
-3. `src/features/search/server/providers/`にアダプターを追加します。
-4. `src/features/search/server/create-provider.ts`にファクトリーのエントリを追加します。
-5. プロバイダーにカスタムフィールドが必要な場合はフォームフラグメントを追加します。
-6. リクエスト構築とレスポンス正規化のテストを追加します。
+- [コントリビューション](CONTRIBUTING.md) · [行動規範](CODE_OF_CONDUCT.md) · [セキュリティ](SECURITY.md)
+- [ガバナンス](GOVERNANCE.md) · [メンテナー](MAINTAINERS.md) · [サポート](SUPPORT.md) · [変更履歴](CHANGELOG.md)
 
 ## ライセンス
 
 [MIT License](LICENSE)
+
+---
+
+Sparelayが検索の手間やコストを減らせたら、⭐で他の人にも届けてください。
