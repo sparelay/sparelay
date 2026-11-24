@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/images/logo.svg" width="104" alt="Sparelayロゴ" />
+  <img src="docs/images/logo.svg" width="250" alt="Sparelayロゴ" />
 </p>
 
 <p align="center">
@@ -15,28 +15,23 @@
   <a href="LICENSE"><img src="https://img.shields.io/github/license/sparelay/sparelay?style=flat-square&labelColor=1b1b1b&color=4A8F8C" alt="ライセンス: MIT" /></a>
 </p>
 
-<h1 align="center">Sparelay</h1>
+<h1 align="center">
+  Sparelay
+</h1>
 
 <p align="center">
   <strong>ひとつの検索API。複数のプロバイダー。自動フォールバック。</strong><br />
   OpenWebUI、LLMエージェント、RAGパイプライン向けのセルフホスト型検索ゲートウェイ。
 </p>
 
----
-
 <p align="center">
   <a href="#クイックスタート">クイックスタート</a> ·
   <a href="#機能">機能</a> ·
   <a href="#sparelayを選ぶ理由">Sparelayを選ぶ理由</a> ·
-  <a href="#仕組み">仕組み</a> ·
   <a href="#インテグレーション">インテグレーション</a> ·
   <a href="#対応プロバイダー">対応プロバイダー</a> ·
   <a href="#設定">設定</a>
 </p>
-
-Sparelayはアプリケーションと検索APIの間に立ちます。契約済みのプロバイダーを登録し、好みの順序に並べ、安定した1つのエンドポイントを呼び出すだけです。プロバイダーがエラー、タイムアウト、レート制限、または空の結果を返した場合、Sparelayは自動的に次のプロバイダーを試し、その結果を記録します。
-
-プロバイダー管理、検索プレイグラウンド、利用状況の分析、検索ログ、AIエージェント向けのMCPエンドポイントを備えたWeb UIも同梱しています。
 
 ![ダッシュボード — 検索の健康状態をひと目で。成功率、レイテンシ、フォールバック、1時間〜30日のトレンド。](docs/images/banner/dashboard.webp)
 
@@ -45,6 +40,10 @@ Sparelayはアプリケーションと検索APIの間に立ちます。契約済
 ![プレイグラウンド — 1回のクエリで、すべての結果を。Autoまたは任意のプロバイダーで実行し、生のJSONを確認。](docs/images/banner/playground.webp)
 
 ![ログ — すべてのリクエストを記録。クエリ、プロバイダー、試行回数、レイテンシ、ステータスを全件保存。](docs/images/banner/logs.webp)
+
+Sparelayはアプリケーションと検索APIの間に立ちます。契約済みのプロバイダーを登録し、好みの順序に並べ、安定した1つのエンドポイントを呼び出すだけです。プロバイダーがエラー、タイムアウト、レート制限、または空の結果を返した場合、Sparelayは自動的に次のプロバイダーを試し、その結果を記録します。
+
+プロバイダー管理、検索プレイグラウンド、利用状況の分析、検索ログ、AIエージェント向けのMCPエンドポイントを備えたWeb UIも同梱しています。
 
 ## 機能
 
@@ -111,21 +110,6 @@ Sparelayはアプリケーションと検索APIの間に立ちます。契約済
    ```
 
 5. [http://localhost:3000](http://localhost:3000)を開き、`API_KEY`の値でログインします。
-
-## 仕組み
-
-検索リクエストは、どのインターフェースから呼ばれても同じ経路を通ります。
-
-![Sparelayの検索ルーティング：アプリがPOST /searchを1回送り、Sparelayがフォールバック順とタイムアウト予算を適用し、結果が返るまでプロバイダーを順に試します](docs/images/how-it-works.svg)
-
-1. **プロバイダーを絞り込む**。有効なプロバイダーのみを対象とし、保存された順序で並べます。
-2. **クールダウン中のプロバイダーをスキップ**。`cooldownUntil`が未来のプロバイダーはスキップします。
-3. **タイムバジェットを適用**。各プロバイダーには全体タイムアウトの範囲内で上限が与えられます。全体タイムアウトは<strong>Settings</strong>で変更でき、デフォルトは30秒です。
-4. **プロバイダーを呼び出す**。プロバイダーはネイティブのレスポンスを`{ link, title, snippet }`に正規化します。
-5. **必要に応じてフォールバック**。エラー、タイムアウト、空のレスポンス（`fallbackOnEmpty`が有効な場合）は次のプロバイダーを試します。
-6. **結果を記録**。試行回数、レイテンシ、ステータス、ソース（`api`、`mcp`、`playground`）とともにリクエストをログに記録します。
-
-タイムアウトの計算式、クールダウンの範囲、ログの各フィールドは[How it works in depth](docs/how-it-works.md)（英語）にまとめています。
 
 ## インテグレーション
 
@@ -247,8 +231,13 @@ bun run typecheck && bun run lint && bun run test
 
 ## コミュニティ
 
-- [コントリビューション](CONTRIBUTING.md) · [行動規範](CODE_OF_CONDUCT.md) · [セキュリティ](SECURITY.md)
-- [ガバナンス](GOVERNANCE.md) · [メンテナー](MAINTAINERS.md) · [サポート](SUPPORT.md) · [変更履歴](CHANGELOG.md)
+- [コントリビューション](CONTRIBUTING.md)
+- [行動規範](CODE_OF_CONDUCT.md)
+- [セキュリティ](SECURITY.md)
+- [ガバナンス](GOVERNANCE.md)
+- [メンテナー](MAINTAINERS.md)
+- [サポート](SUPPORT.md)
+- [変更履歴](CHANGELOG.md)
 
 ## ライセンス
 

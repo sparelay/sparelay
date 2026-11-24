@@ -20,14 +20,14 @@
 </h1>
 
 <p align="center">
-  <strong>A self-hosted search gateway for OpenWebUI, LLM agents, and RAG pipelines.</strong>
+  <strong>One search API. Many providers. Automatic fallback.</strong><br />
+  A self-hosted search gateway for OpenWebUI, LLM agents, and RAG pipelines.
 </p>
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
   <a href="#features">Features</a> ·
   <a href="#why-sparelay">Why Sparelay</a> ·
-  <a href="#how-it-works">How It Works</a> ·
   <a href="#integrations">Integrations</a> ·
   <a href="#supported-providers">Supported Providers</a> ·
   <a href="#configuration">Configuration</a>
@@ -110,21 +110,6 @@ Calling provider APIs directly means building retries, ordering, and rate-limit 
    ```
 
 5. Open [http://localhost:3000](http://localhost:3000) and sign in with the `API_KEY` value.
-
-## How It Works
-
-A search request takes the same path no matter which interface called it.
-
-![How Sparelay routes a search: your app sends one POST /search request, Sparelay applies the fallback order and a timeout budget, then tries providers in order until one returns results](docs/images/how-it-works.svg)
-
-1. **Filter providers.** Only enabled providers are considered, ordered by their saved position.
-2. **Skip cooling providers.** A provider whose `cooldownUntil` is in the future is skipped.
-3. **Apply time budgets.** Each provider gets a bounded slice of the overall timeout, which comes from **Settings** and defaults to 30 seconds.
-4. **Call the provider.** Providers normalize their native response into `{ link, title, snippet }`.
-5. **Fall back when needed.** Errors, timeouts, and empty responses (when `fallbackOnEmpty` is enabled) cause the next provider to be tried.
-6. **Record the outcome.** The request is logged with attempts, latency, status, and source (`api`, `mcp`, or `playground`).
-
-For the exact timeout math, cooldown windows, and log fields, see [How it works in depth](docs/how-it-works.md).
 
 ## Integrations
 
@@ -246,8 +231,13 @@ New providers are a small, well-defined change — see [Adding a provider](CONTR
 
 ## Community
 
-- [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md)
-- [Governance](GOVERNANCE.md) · [Maintainers](MAINTAINERS.md) · [Support](SUPPORT.md) · [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security](SECURITY.md)
+- [Governance](GOVERNANCE.md)
+- [Maintainers](MAINTAINERS.md)
+- [Support](SUPPORT.md)
+- [Changelog](CHANGELOG.md)
 
 ## License
 
