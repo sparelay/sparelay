@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.0](https://github.com/sparelay/sparelay/compare/0.3.0...0.4.0) (2026-11-27)
+
+
+### Features
+
+* add a GitHub icon link to the header ([#34](https://github.com/sparelay/sparelay/issues/34)) ([9be8ed0](https://github.com/sparelay/sparelay/commit/9be8ed070066c5083afb9fc822780d5fa880bd04))
+* return structured search results from the MCP tool ([#27](https://github.com/sparelay/sparelay/issues/27)) ([f09dfce](https://github.com/sparelay/sparelay/commit/f09dfce84872d10e1c14da83c2c6072115ab5d8a))
+* show the app version badge in the header ([#26](https://github.com/sparelay/sparelay/issues/26)) ([5983c01](https://github.com/sparelay/sparelay/commit/5983c0124362ede3b01ed12417316e9b96c8585b))
+
 ## [0.3.0](https://github.com/sparelay/sparelay/compare/0.2.0...0.3.0) (2026-11-14)
 
 
